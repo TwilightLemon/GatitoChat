@@ -1,0 +1,71 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:GatitoChat.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="GatitoChat.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="GatitoChat"
+        Background="Transparent"
+        TransparencyLevelHint="AcrylicBlur"
+        ExtendClientAreaToDecorationsHint="True">
+    <Panel>
+        <ExperimentalAcrylicBorder IsHitTestVisible="False">
+            <ExperimentalAcrylicBorder.Material>
+                <ExperimentalAcrylicMaterial
+                    BackgroundSource="Digger"
+                    TintColor="{DynamicResource AcrylicTintColor}"
+                    TintOpacity="1"
+                    MaterialOpacity="0.65" />
+            </ExperimentalAcrylicBorder.Material>
+        </ExperimentalAcrylicBorder>
+        
+        <Grid >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" MinWidth="280"/>
+                <ColumnDefinition Width="5*"/>
+            </Grid.ColumnDefinitions>
+            <Grid>
+                <!--Icon & Tittle-->
+                <TextBlock Margin="20" Text="🐱" FontSize="24"/>
+                <TextBlock Margin="60 24 0 0" FontSize="24" FontWeight="Bold">Gatito Chat</TextBlock>
+                <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Bottom"
+                           Margin="12 0 12 20">
+                    <Button Theme="{StaticResource RoundButtonTheme}"
+                            Command="{Binding LoginCommand}"
+                            Content="{Binding LoginBtnHint}">
+                    </Button>
+                    <Button Margin="8 0 0  0"
+                            Theme="{StaticResource RoundButtonTheme}"
+                            Command="{Binding ConnectCommand}"
+                            Content="{Binding ConnectBtnHint}">
+                    </Button>
+                </WrapPanel>
+                <StackPanel Margin="20 80 20 80">
+                    <ListBox ItemsSource="{Binding RoomsInfo}"
+                             ItemContainerTheme="{StaticResource RoundListBoxItemTheme}"
+                             Background="Transparent">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Height="48">
+                                    <TextBlock Margin="8 0" VerticalAlignment="Center" TextAlignment="Center"
+                                               Text="{Binding Name}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <Button Content="Add Room" HorizontalAlignment="Stretch" 
+                            Margin="0 10 0 0"
+                            Theme="{StaticResource RoundButtonTheme}"
+                            Command="{Binding AddRoomCommand}"/>
+                </StackPanel>
+            </Grid>
+            <Grid Grid.Column="1">
+                <Border Background="{DynamicResource ContentMaskBrush}"
+                        CornerRadius="18 0 0 18"/>
+            </Grid>
+        </Grid>
+    </Panel>
+</Window>

@@ -1,0 +1,98 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:GatitoChat.ViewModels"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="GatitoChat.Views.LoginWindow"
+        x:DataType="vm:LoginWindowViewModel"
+        Title="LoginWindow"
+        CanResize="False"
+        Topmost="True"
+        ShowInTaskbar="False"
+        Background="Transparent"
+        TransparencyLevelHint="AcrylicBlur"
+        Height="520"
+        Width="400"
+        ExtendClientAreaToDecorationsHint="True">
+    <Panel>
+        <ExperimentalAcrylicBorder IsHitTestVisible="False">
+            <ExperimentalAcrylicBorder.Material>
+                <ExperimentalAcrylicMaterial
+                    BackgroundSource="Digger"
+                    TintColor="{DynamicResource AcrylicTintColor}"
+                    TintOpacity="1"
+                    MaterialOpacity="0.65" />
+            </ExperimentalAcrylicBorder.Material>
+        </ExperimentalAcrylicBorder>
+        <Panel IsVisible="{Binding !Authenticated}">
+            <Button Content="Back" Padding="12 8" Margin="20"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Command="{Binding BackToCheckUserCommand}"
+                    IsVisible="{Binding IsCheckedUser}" />
+            <StackPanel Margin="20 80 20 20">
+                <TextBlock Text="{Binding Greeting}"
+                           FontSize="22" TextAlignment="Center" />
+                <TextBlock Text="{Binding Hint}"
+                           TextAlignment="Center"
+                           Margin="0 6 0 0" />
+                <Panel>
+                    <StackPanel IsVisible="{Binding !IsCheckedUser}">
+                        <TextBox Watermark="Your Email"
+                                 Text="{Binding Uid}"
+                                 Margin="20 60 20 0" />
+                        <Button Content="Confirm" Padding="12 8" Margin="20 20 20 0"
+                                Command="{Binding CheckUserCommand}" />
+                        <Expander Header="Advance" Margin="20 20 0 0" Width="320">
+                            <StackPanel>
+                                <TextBox Watermark="chat server url" Text="{Binding ChatServerUrl}" />
+                                <TextBox Watermark="auth server url" Text="{Binding AuthServerUrl}" Margin="0 8 0 0" />
+                            </StackPanel>
+                        </Expander>
+                    </StackPanel>
+                    <StackPanel>
+                        <StackPanel.IsVisible>
+                            <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                <Binding Path="IsUserExisting" />
+                                <Binding Path="IsCheckedUser" />
+                            </MultiBinding>
+                        </StackPanel.IsVisible>
+                        <TextBox Watermark="Password"
+                                 PasswordChar="*"
+                                 Text="{Binding Password}"
+                                 Margin="20 60 20 0" />
+                        <Button Content="Login" Padding="12 8" Margin="20 20 20 0"
+                                Command="{Binding LoginCommand}" />
+                    </StackPanel>
+                    <StackPanel>
+                        <StackPanel.IsVisible>
+                            <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                <Binding Path="!IsUserExisting" />
+                                <Binding Path="IsCheckedUser" />
+                            </MultiBinding>
+                        </StackPanel.IsVisible>
+                        <TextBox Watermark="Nickname"
+                                 Text="{Binding Username}"
+                                 Margin="20 60 20 0" />
+                        <TextBox Watermark="Password"
+                                 PasswordChar="*"
+                                 Text="{Binding Password}"
+                                 Margin="20 20 20 0" />
+                        <TextBox Watermark="Confirm Password"
+                                 PasswordChar="*"
+                                 Text="{Binding ConfirmPassword}"
+                                 Margin="20 20 20 0" />
+                        <Button Content="Register" Padding="12 8" Margin="20 20 20 0"
+                                Command="{Binding RegisterCommand}" />
+                    </StackPanel>
+                </Panel>
+            </StackPanel>
+        </Panel>
+        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
+                   Margin="20 0"
+                   TextWrapping="Wrap"
+                   IsVisible="{Binding Authenticated}"
+                   Text="{Binding AuthGreeting}" FontSize="32"/>
+    </Panel>
+</Window>

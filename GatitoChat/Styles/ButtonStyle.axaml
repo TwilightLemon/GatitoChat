@@ -1,0 +1,29 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <ControlTheme x:Key="RoundButtonTheme" TargetType="Button">
+      <Setter Property="Template">
+          <ControlTemplate>
+              <Border Name="PART_Border"
+                      Background="{TemplateBinding Background}"
+                      Padding="{TemplateBinding Padding}"
+                      CornerRadius="12">
+                  <ContentPresenter Content="{TemplateBinding Content}"
+                                    ContentTemplate="{TemplateBinding ContentTemplate}"
+                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" />
+              </Border>
+          </ControlTemplate>
+      </Setter>
+      <Setter Property="Background" Value="{DynamicResource MaskBrush}" />
+      <Setter Property="HorizontalContentAlignment" Value="Center" />
+      <Setter Property="VerticalContentAlignment" Value="Center" />
+      <Setter Property="Padding" Value="8 12"/>
+      
+      <Style Selector="^:pressed">
+          <Setter Property="Background" Value="{DynamicResource FocusMaskBrush}" />
+      </Style>
+      <Style Selector="^:pointerover">
+          <Setter Property="Background" Value="{DynamicResource FocusMaskBrush}" />
+      </Style>
+  </ControlTheme>
+</ResourceDictionary>

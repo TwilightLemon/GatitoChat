@@ -1,0 +1,44 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="GatitoChat.App"
+             xmlns:local="using:GatitoChat"
+             RequestedThemeVariant="Default">
+    <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+
+    <Application.DataTemplates>
+        <local:ViewLocator />
+    </Application.DataTemplates>
+
+    <Application.Styles>
+        <FluentTheme />
+    </Application.Styles>
+
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="Styles/ButtonStyle.axaml"/>
+                <ResourceInclude Source="Styles/ListBoxItemStyle.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <!-- 定义主题相关资源 -->
+            <ResourceDictionary.ThemeDictionaries>
+                <!-- Light 主题 -->
+                <ResourceDictionary x:Key="Light">
+                    <Color x:Key="AcrylicTintColor" >White</Color>
+                    <SolidColorBrush x:Key="ContentMaskBrush">#3CFFFFFF</SolidColorBrush>
+                    <SolidColorBrush x:Key="MaskBrush">#3C000000</SolidColorBrush>
+                    <SolidColorBrush x:Key="FocusMaskBrush">#5C000000</SolidColorBrush>
+                    <SolidColorBrush x:Key="BorderBrush">#3F000000</SolidColorBrush>
+                </ResourceDictionary>
+
+                <!-- Dark 主题 -->
+                <ResourceDictionary x:Key="Dark">
+                    <Color x:Key="AcrylicTintColor" >Black</Color>
+                    <SolidColorBrush x:Key="ContentMaskBrush">#3C000000</SolidColorBrush>
+                    <SolidColorBrush x:Key="MaskBrush">#3CFFFFFF</SolidColorBrush>
+                    <SolidColorBrush x:Key="FocusMaskBrush">#5CFFFFFF</SolidColorBrush>
+                    <SolidColorBrush x:Key="BorderBrush">#3FFFFFFF</SolidColorBrush>
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
