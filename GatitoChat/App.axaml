@@ -25,8 +25,8 @@
                 <ResourceDictionary x:Key="Light">
                     <Color x:Key="AcrylicTintColor" >White</Color>
                     <SolidColorBrush x:Key="ContentMaskBrush">#3CFFFFFF</SolidColorBrush>
-                    <SolidColorBrush x:Key="MaskBrush">#3C000000</SolidColorBrush>
-                    <SolidColorBrush x:Key="FocusMaskBrush">#5C000000</SolidColorBrush>
+                    <SolidColorBrush x:Key="MaskBrush">#1C000000</SolidColorBrush>
+                    <SolidColorBrush x:Key="FocusMaskBrush">#3C000000</SolidColorBrush>
                     <SolidColorBrush x:Key="BorderBrush">#3F000000</SolidColorBrush>
                 </ResourceDictionary>
 
@@ -34,8 +34,8 @@
                 <ResourceDictionary x:Key="Dark">
                     <Color x:Key="AcrylicTintColor" >Black</Color>
                     <SolidColorBrush x:Key="ContentMaskBrush">#3C000000</SolidColorBrush>
-                    <SolidColorBrush x:Key="MaskBrush">#3CFFFFFF</SolidColorBrush>
-                    <SolidColorBrush x:Key="FocusMaskBrush">#5CFFFFFF</SolidColorBrush>
+                    <SolidColorBrush x:Key="MaskBrush">#1CFFFFFF</SolidColorBrush>
+                    <SolidColorBrush x:Key="FocusMaskBrush">#3CFFFFFF</SolidColorBrush>
                     <SolidColorBrush x:Key="BorderBrush">#3FFFFFFF</SolidColorBrush>
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>

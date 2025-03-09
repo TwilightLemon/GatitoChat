@@ -49,7 +49,7 @@ public partial class App : Application
         services.AddTransient<AddRoomWindowViewModel>();
 
         services.AddSingleton<UserProfileService>();
-        services.AddSingleton<CommonClientService>();
+        services.AddSingleton<ChatClientService>();
     }
     public static T GetRequiredService<T>() where T : notnull => _host!.Services.GetRequiredService<T>();
     public static MainWindow MainWindow => _host!.Services.GetRequiredService<MainWindow>();

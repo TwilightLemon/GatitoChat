@@ -22,7 +22,7 @@
                     BackgroundSource="Digger"
                     TintColor="{DynamicResource AcrylicTintColor}"
                     TintOpacity="1"
-                    MaterialOpacity="0.65" />
+                    MaterialOpacity="0.85" />
             </ExperimentalAcrylicBorder.Material>
         </ExperimentalAcrylicBorder>
         <Panel IsVisible="{Binding !Authenticated}">
@@ -46,7 +46,7 @@
                                 Command="{Binding CheckUserCommand}" />
                         <Expander Header="Advance" Margin="20 20 0 0" Width="320">
                             <StackPanel>
-                                <TextBox Watermark="chat server url" Text="{Binding ChatServerUrl}" />
+                                <TextBox Watermark="chat server url" Text="{Binding ChatServerUri}" />
                                 <TextBox Watermark="auth server url" Text="{Binding AuthServerUrl}" Margin="0 8 0 0" />
                             </StackPanel>
                         </Expander>

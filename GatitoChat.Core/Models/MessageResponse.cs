@@ -5,7 +5,11 @@ namespace GatitoChat.Core.Models;
 public sealed class MessageResponse
 {
     [JsonPropertyName("type")]
-    public MessageType Type { get; set; }=MessageType.Chat;
+    public string Type { get; set; }=MessageType.Chat;
     [JsonPropertyName("message")]
     public string Message { get; set; }=string.Empty;
+    [JsonPropertyName("roomId")]
+    public string RoomId { get; set; }=string.Empty;
+    [JsonPropertyName("name")]
+    public string SenderName { get; set; }=string.Empty;
 }

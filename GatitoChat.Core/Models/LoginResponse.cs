@@ -12,8 +12,4 @@ public sealed class LoginResponse
     public string? Uid { get; set; }
     [JsonPropertyName("signature")]
     public string? Token { get; set; }
-    [JsonIgnore]
-    public string? RandomSeed { get; set; }
-    [JsonIgnore]
-    public string? Sign { get; set; }
 }

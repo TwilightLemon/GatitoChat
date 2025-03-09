@@ -14,14 +14,12 @@ public partial class AddRoomWindow : Window
     public AddRoomWindow(AddRoomWindowViewModel vm)
     {
         DataContext=_vm = vm;
-        vm.AddRoomSuccess += Vm_AddRoomSuccess;
+        vm.OnAddedRoom += Vm_AddRoomSuccess;
         InitializeComponent();
     }
 
-    private async void Vm_AddRoomSuccess(RoomInfo info)
+    private void Vm_AddRoomSuccess()
     {
-        _vm.AddRoomSuccess -= Vm_AddRoomSuccess;
-        await Task.Delay(1500);
         Close();
     }
 }

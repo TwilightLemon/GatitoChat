@@ -22,7 +22,7 @@
                     BackgroundSource="Digger"
                     TintColor="{DynamicResource AcrylicTintColor}"
                     TintOpacity="1"
-                    MaterialOpacity="0.65" />
+                    MaterialOpacity="0.85" />
             </ExperimentalAcrylicBorder.Material>
         </ExperimentalAcrylicBorder>
         <TextBox HorizontalAlignment="Stretch" 
@@ -35,6 +35,5 @@
                 Margin="0 80 0 0"
                 Padding="12,8"
                 Command="{Binding CheckRoomCommand}">Add</Button>
-        <TextBlock VerticalAlignment="Bottom" Margin="20" Text="{Binding Hint}"/>
     </Panel>
 </Window>

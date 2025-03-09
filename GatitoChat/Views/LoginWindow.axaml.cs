@@ -2,24 +2,27 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using GatitoChat.Services;
 using GatitoChat.ViewModels;
 
 namespace GatitoChat.Views;
 
 public partial class LoginWindow : Window
 {
+    private readonly UserProfileService _userProfileService;
     private readonly LoginWindowViewModel _viewModel;
 
-    public LoginWindow(LoginWindowViewModel viewModel)
+    public LoginWindow(LoginWindowViewModel viewModel,UserProfileService userProfileService)
     {
         InitializeComponent();
+        _userProfileService = userProfileService;
         DataContext = _viewModel = viewModel;
-        viewModel.OnLoginCallback += ViewModel_OnLoginCallBack;
+        userProfileService.OnLoginCallback += UserProfileService_OnLogin;
     }
 
-    private async void ViewModel_OnLoginCallBack()
+    private async void UserProfileService_OnLogin()
     {
-        _viewModel.OnLoginCallback -= ViewModel_OnLoginCallBack;
+        _userProfileService.OnLoginCallback -= UserProfileService_OnLogin;
         await Task.Delay(1500);
         Close();
     }

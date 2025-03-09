@@ -8,6 +8,4 @@ public sealed class ExitEntity
     public string[]? RoomIds { get; set; }
     [JsonPropertyName("name")] 
     public string Name { get; set; }=string.Empty;
-    [JsonPropertyName("token")]
-    public string Token { get; set; }=string.Empty;
 }

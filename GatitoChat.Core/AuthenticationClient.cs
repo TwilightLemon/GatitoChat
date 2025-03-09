@@ -37,7 +37,7 @@ public class AuthenticationClient(HttpClient hc,string endpoint)
         return PBCUtils.Sign(privateKey, data);
     }
 
-    public async Task<LoginResponse?> Login(string uid, string pw)
+    public async Task<UserCredential?> Login(string uid, string pw)
     {
         var sign = Sign(pw, uid);
         var blindUid = PBCUtils.BlindUid(uid);
@@ -47,11 +47,8 @@ public class AuthenticationClient(HttpClient hc,string endpoint)
             Sign = sign,Uid=blindUid,Rnd =randomSeed
         });
         var result= await response.Content.ReadFromJsonAsync<LoginResponse>();
-        if (result != null)
-        {
-            result.RandomSeed = randomSeed;
-            result.Sign = sign;
-        }
-        return result;
+        if (result is { UserName: not null, Token: not null })
+            return new(result.UserName, blindUid, result.Token, randomSeed, sign);
+        return null;
     }
 }

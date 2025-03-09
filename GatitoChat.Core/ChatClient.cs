@@ -6,14 +6,15 @@ using GatitoChat.Core.Models;
 
 namespace GatitoChat.Core;
 
-public class ChatClient(string connectionUri,LoginResponse userInfo)
+public class ChatClient:IDisposable
 {
     private ClientWebSocket? ws;
     private Task? receiveTask;
+    public UserCredential UserInfo { get; set; }    
     public event Action? OnConnectionFailed, OnConnectionSuccess, OnConnectionClosed;
     public delegate void MessageReceivedHandler(MessageResponse msg);
     public event MessageReceivedHandler? OnMessageReceived;
-    public async Task Connect()
+    public async Task Connect(string connectionUri)
     {
         var uri = new Uri(connectionUri);
         ws = new();
@@ -56,14 +57,14 @@ public class ChatClient(string connectionUri,LoginResponse userInfo)
         }
     }
 
-    private async Task SendMessage(string roomHash,MessageType type,string message)
+    private async Task SendMessage(string roomHash,string type,string message)
     {
         if (ws == null) return;
         if (ws.State == WebSocketState.Open)
         {
             var bytes = Encoding.UTF8.GetBytes(StringifyMsgBody(new()
             {
-                Name = userInfo.UserName,Token = userInfo.Token,RoomHash = roomHash,Type = type,Message = message
+                Name = UserInfo.Username,Token = UserInfo.Token,RoomHash = roomHash,Type = type,Message = message,Sign = UserInfo.Sign
             }));
             await ws.SendAsync(new ArraySegment<byte>(bytes), WebSocketMessageType.Text, true, CancellationToken.None);
         }
@@ -83,10 +84,16 @@ public class ChatClient(string connectionUri,LoginResponse userInfo)
         await ws.CloseAsync(WebSocketCloseStatus.NormalClosure,
                     StringifyExitMsgBody(new()
                     {
-                        Name = userInfo.UserName,Token = userInfo.Token,RoomIds = roomHashes
+                        Name = UserInfo.Username,RoomIds = roomHashes
                     }),
                     CancellationToken.None);
         ws.Dispose();
         OnConnectionClosed?.Invoke();
+    }
+
+    public void Dispose()
+    {
+        ws?.Dispose();
+        receiveTask?.Dispose();
     }
 }

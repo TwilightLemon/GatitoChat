@@ -9,7 +9,9 @@ using GatitoChat.Services;
 
 namespace GatitoChat.ViewModels;
 
-public partial class LoginWindowViewModel(IHttpClientFactory httpClientFactory, UserProfileService userProfileService)
+public partial class LoginWindowViewModel
+    (IHttpClientFactory httpClientFactory,
+        UserProfileService userProfileService)
     : ViewModelBase
 {
     private const string OriGreeting = "Welcome to GatitoChat!";
@@ -24,25 +26,20 @@ public partial class LoginWindowViewModel(IHttpClientFactory httpClientFactory, 
 
     public string? Username { get; set; }
 
-    public string AuthServerUrl { get; set; } = "https://gatito-auth.vercel.app/user/";
-    public string ChatServerUrl { get; set; } = "http://127.0.0.1:8080/";
+    public string AuthServerUrl { get; set; } = "http://127.0.0.1:3000/user/";
+    public string ChatServerUri { get; set; } = "ws://127.0.0.1:8080/";
 
     [ObservableProperty] private bool _isCheckedUser;
     [ObservableProperty] private bool _isUserExisting;
     [ObservableProperty] private bool _authenticated;
 
-    public event Action? OnLoginCallback;
-
     private AuthenticationClient? _authClient;
 
-    private void Authenticate(LoginResponse credential)
+    private void Authenticate(UserCredential credential)
     {
-        userProfileService.Credential = credential;
-        userProfileService.AuthServerUrl=AuthServerUrl;
-        userProfileService.ChatServerUrl=ChatServerUrl;
-        AuthGreeting = $"Welcome🐱,  {credential.UserName}!";
+        userProfileService.Login(credential, AuthServerUrl, ChatServerUri);
+        AuthGreeting = $"Welcome🐱,  {credential.Username}!";
         Authenticated = true;
-        OnLoginCallback?.Invoke();
     }
 
     [RelayCommand]
@@ -51,8 +48,7 @@ public partial class LoginWindowViewModel(IHttpClientFactory httpClientFactory, 
         if (string.IsNullOrWhiteSpace(Uid)) return;
         if (string.IsNullOrEmpty(Password)) return;
         
-        if (await _authClient!.Login(Uid, Password) is
-            { Success: true} res)
+        if (await _authClient!.Login(Uid, Password) is { } res)
         {
             Authenticate(res);
         }

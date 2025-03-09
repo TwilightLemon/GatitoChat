@@ -2,14 +2,11 @@
 
 namespace GatitoChat.Core.Models;
 
-public enum MessageType
+public static class MessageType
 {
-    [JsonStringEnumMemberName("chat")]
-    Chat,
-    [JsonStringEnumMemberName("leave")]
-    Leave,
-    [JsonStringEnumMemberName("join")]
-    Join
+    public const string Chat = "chat";
+    public const string Leave = "leave";
+    public const string Join = "join";
 }
 public sealed class MessageEntity
 {
@@ -17,10 +14,12 @@ public sealed class MessageEntity
     public string Name { get; set; }=string.Empty;
     [JsonPropertyName("token")]
     public string Token { get; set; }=string.Empty;
+    [JsonPropertyName("sign")]
+    public string Sign { get; set; }=string.Empty;
     [JsonPropertyName("room")]
     public string RoomHash { get; set; }=string.Empty;
     [JsonPropertyName("type")]
-    public  MessageType Type { get; set; }=MessageType.Chat;
+    public string Type { get; set; }=MessageType.Chat;
     [JsonPropertyName("message")]
     public string Message { get; set; }=string.Empty;
 }
