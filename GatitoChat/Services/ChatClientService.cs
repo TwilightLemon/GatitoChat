@@ -26,7 +26,15 @@ public class ChatClientService:IAsyncDisposable
     {
         if (Rooms.FirstOrDefault(r => r.HashId == msg.RoomId) is { } room)
         {
-            room.Messages.Add(new MessageItem(msg.Type,msg.SenderName,msg.Message));
+            var type = SenderType.Other;
+            if (msg.Type is MessageType.Join or MessageType.Leave)
+            {
+                type = SenderType.System;
+            }else if (msg.Type is MessageType.Chat && msg.SenderId==_userProfileService.Credential!.BlindedUid)
+            {
+                type = SenderType.Self;
+            }
+            room.Messages.Add(new MessageItem(type,msg.SenderName,msg.Message));
             room.LastMsg=$"{msg.SenderName}: {msg.Message}";
         }
     }

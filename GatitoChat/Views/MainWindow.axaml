@@ -1,6 +1,7 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:GatitoChat.ViewModels"
+        xmlns:local="clr-namespace:GatitoChat.Views"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
@@ -79,17 +80,11 @@
                     </Button>
                 </WrapPanel>
                 
-                <ScrollViewer Margin="20 100 20 200">
-                    <ItemsControl ItemsSource="{Binding SelectedRoom.Messages,FallbackValue={x:Static BindingOperations.DoNothing}}">
+                <ScrollViewer Margin="0 50 8 180">
+                    <ItemsControl Margin="12 0 12 0" ItemsSource="{Binding SelectedRoom.Messages,FallbackValue={x:Null}}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Panel>
-                                    <TextBlock Text="{Binding Name}" HorizontalAlignment="Left"/>
-                                    <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0 20 0 12"
-                                            CornerRadius="12" Padding="12" Background="{DynamicResource ContentMaskBrush}">
-                                        <TextBlock Text="{Binding Content}" TextWrapping="Wrap"/>
-                                    </Border>
-                                </Panel>
+                                <local:ChatBubble Message="{Binding}"/>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>

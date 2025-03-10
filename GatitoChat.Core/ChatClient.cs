@@ -64,7 +64,7 @@ public class ChatClient:IDisposable
         {
             var bytes = Encoding.UTF8.GetBytes(StringifyMsgBody(new()
             {
-                Name = UserInfo.Username,Token = UserInfo.Token,RoomHash = roomHash,Type = type,Message = message,Sign = UserInfo.Sign
+                Name = UserInfo.Username,SenderId = UserInfo.BlindedUid,Token = UserInfo.Token,RoomHash = roomHash,Type = type,Message = message,Sign = UserInfo.Sign
             }));
             await ws.SendAsync(new ArraySegment<byte>(bytes), WebSocketMessageType.Text, true, CancellationToken.None);
         }

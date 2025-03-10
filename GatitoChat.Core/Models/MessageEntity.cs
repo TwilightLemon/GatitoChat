@@ -12,6 +12,8 @@ public sealed class MessageEntity
 {
     [JsonPropertyName("name")]
     public string Name { get; set; }=string.Empty;
+    [JsonPropertyName("senderId")]
+    public string SenderId { get; set; }=string.Empty;
     [JsonPropertyName("token")]
     public string Token { get; set; }=string.Empty;
     [JsonPropertyName("sign")]

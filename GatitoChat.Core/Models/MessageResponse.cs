@@ -12,4 +12,6 @@ public sealed class MessageResponse
     public string RoomId { get; set; }=string.Empty;
     [JsonPropertyName("name")]
     public string SenderName { get; set; }=string.Empty;
+    [JsonPropertyName("senderId")]
+    public string SenderId { get; set; }=string.Empty;
 }
