@@ -12,6 +12,7 @@
 
     <Application.Styles>
         <FluentTheme />
+        <StyleInclude Source="Styles/TextBoxStyle.axaml"/>
     </Application.Styles>
 
     <Application.Resources>

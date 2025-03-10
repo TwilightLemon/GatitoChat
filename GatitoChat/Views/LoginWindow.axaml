@@ -2,6 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:behavior="using:GatitoChat.Behaviors"
         xmlns:vm="clr-namespace:GatitoChat.ViewModels"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="GatitoChat.Views.LoginWindow"
@@ -27,6 +28,7 @@
         </ExperimentalAcrylicBorder>
         <Panel IsVisible="{Binding !Authenticated}">
             <Button Content="Back" Padding="12 8" Margin="20"
+                    Theme="{StaticResource RoundButtonTheme}"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Command="{Binding BackToCheckUserCommand}"
@@ -39,15 +41,21 @@
                            Margin="0 6 0 0" />
                 <Panel>
                     <StackPanel IsVisible="{Binding !IsCheckedUser}">
-                        <TextBox Watermark="Your Email"
+                        <TextBox x:Name="EmailInputTb" Watermark="Your Email"
+                                 Classes="input"
                                  Text="{Binding Uid}"
+								 behavior:KeyEnterBehavior.Command="{Binding CheckUserCommand}"
                                  Margin="20 60 20 0" />
                         <Button Content="Confirm" Padding="12 8" Margin="20 20 20 0"
+                                Theme="{StaticResource RoundAccentButtonTheme}"
                                 Command="{Binding CheckUserCommand}" />
-                        <Expander Header="Advance" Margin="20 20 0 0" Width="320">
+                        <Expander Header="Advance" Margin="20 20 0 0" Width="320"
+                                  Background="Transparent"
+                                  BorderThickness="0"
+                                  CornerRadius="8">
                             <StackPanel>
-                                <TextBox Watermark="chat server url" Text="{Binding ChatServerUri}" />
-                                <TextBox Watermark="auth server url" Text="{Binding AuthServerUrl}" Margin="0 8 0 0" />
+                                <TextBox Watermark="chat server url" Classes="input" Text="{Binding ChatServerUri}" />
+                                <TextBox Watermark="auth server url" Classes="input" Text="{Binding AuthServerUrl}" Margin="0 8 0 0" />
                             </StackPanel>
                         </Expander>
                     </StackPanel>
@@ -60,9 +68,12 @@
                         </StackPanel.IsVisible>
                         <TextBox Watermark="Password"
                                  PasswordChar="*"
+                                 Classes="input"
+								  behavior:KeyEnterBehavior.Command="{Binding LoginCommand}"
                                  Text="{Binding Password}"
                                  Margin="20 60 20 0" />
                         <Button Content="Login" Padding="12 8" Margin="20 20 20 0"
+                                Theme="{DynamicResource RoundAccentButtonTheme}"
                                 Command="{Binding LoginCommand}" />
                     </StackPanel>
                     <StackPanel>
@@ -73,17 +84,22 @@
                             </MultiBinding>
                         </StackPanel.IsVisible>
                         <TextBox Watermark="Nickname"
+                                 Classes="input"
                                  Text="{Binding Username}"
                                  Margin="20 60 20 0" />
                         <TextBox Watermark="Password"
                                  PasswordChar="*"
+                                 Classes="input"
                                  Text="{Binding Password}"
                                  Margin="20 20 20 0" />
                         <TextBox Watermark="Confirm Password"
                                  PasswordChar="*"
+                                 Classes="input"
+								 behavior:KeyEnterBehavior.Command="{Binding RegisterCommand}"
                                  Text="{Binding ConfirmPassword}"
                                  Margin="20 20 20 0" />
                         <Button Content="Register" Padding="12 8" Margin="20 20 20 0"
+                                Theme="{DynamicResource RoundAccentButtonTheme}"
                                 Command="{Binding RegisterCommand}" />
                     </StackPanel>
                 </Panel>

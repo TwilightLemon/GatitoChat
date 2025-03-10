@@ -20,7 +20,7 @@ public partial class ChatBubble : UserControl
 
     private static void MessageChanged(ChatBubble sender, AvaloniaPropertyChangedEventArgs e)
     {
-        sender.Refresh((MessageItem)e.NewValue);
+        sender.Refresh(e.NewValue as MessageItem);
     }
     
     public MessageItem Message
@@ -32,7 +32,7 @@ public partial class ChatBubble : UserControl
     public static readonly StyledProperty<MessageItem> MessageProperty =
         AvaloniaProperty.Register<ChatBubble, MessageItem>(nameof(Message));
 
-    private void Refresh(MessageItem value)
+    private void Refresh(MessageItem? value)
     {
         if (value == null) return;
         if (value.Type == SenderType.System)

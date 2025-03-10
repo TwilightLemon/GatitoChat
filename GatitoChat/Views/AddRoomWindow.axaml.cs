@@ -1,9 +1,6 @@
-﻿using System.Threading.Tasks;
-using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
-using GatitoChat.Core.Models;
+﻿using Avalonia.Controls;
 using GatitoChat.ViewModels;
+using System;
 
 namespace GatitoChat.Views;
 
@@ -16,6 +13,11 @@ public partial class AddRoomWindow : Window
         DataContext=_vm = vm;
         vm.OnAddedRoom += Vm_AddRoomSuccess;
         InitializeComponent();
+    }
+    protected override void OnOpened(EventArgs e)
+    {
+        base.OnOpened(e);
+        RoomNameInputTb.Focus();
     }
 
     private void Vm_AddRoomSuccess()

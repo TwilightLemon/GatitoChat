@@ -12,117 +12,130 @@
         Background="Transparent"
         TransparencyLevelHint="AcrylicBlur"
         ExtendClientAreaToDecorationsHint="True">
-    <Panel>
-        <ExperimentalAcrylicBorder IsHitTestVisible="False">
-            <ExperimentalAcrylicBorder.Material>
-                <ExperimentalAcrylicMaterial
+	<Panel>
+		<ExperimentalAcrylicBorder IsHitTestVisible="False">
+			<ExperimentalAcrylicBorder.Material>
+				<ExperimentalAcrylicMaterial
                     BackgroundSource="Digger"
                     TintColor="{DynamicResource AcrylicTintColor}"
                     TintOpacity="1"
                     MaterialOpacity="{DynamicResource WindowMaskOpacity}" />
-            </ExperimentalAcrylicBorder.Material>
-        </ExperimentalAcrylicBorder>
-        
-        <Grid >
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*" MinWidth="280"/>
-                <ColumnDefinition Width="5*"/>
-            </Grid.ColumnDefinitions>
-            <Grid>
-                <!--Icon & Tittle-->
-                <TextBlock Margin="20" Text="🐱" FontSize="24"/>
-                <TextBlock Margin="60 24 0 0" FontSize="24" FontWeight="Bold">Gatito Chat</TextBlock>
+			</ExperimentalAcrylicBorder.Material>
+		</ExperimentalAcrylicBorder>
 
-                <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Bottom"
+		<Grid >
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="1*" MinWidth="280"/>
+				<ColumnDefinition Width="5*"/>
+			</Grid.ColumnDefinitions>
+			<Grid>
+				<!--Icon & Tittle-->
+				<TextBlock Margin="20" Text="🐱" FontSize="24"/>
+				<TextBlock Margin="60 24 0 0" FontSize="24" FontWeight="Bold">Gatito Chat</TextBlock>
+
+				<WrapPanel HorizontalAlignment="Center" VerticalAlignment="Bottom"
                            Margin="12 0 12 20">
-                    <Button Theme="{StaticResource RoundButtonTheme}"
+					<Button Theme="{StaticResource RoundButtonTheme}"
                         Command="{Binding LoginCommand}"
                         Content="{Binding LoginBtnHint}"/>
-                    <Button Theme="{StaticResource RoundAccentButtonTheme}"
+					<Button Theme="{StaticResource RoundAccentButtonTheme}"
                             Margin="8 0 0 0"
                             Command="{Binding ReconnectCommand}"
                             Content="Reconnect"
                             IsVisible="{Binding IsConnectionFailed}"/>
-                </WrapPanel>
-                
-                <Button Content="Add Room" HorizontalAlignment="Stretch" 
+				</WrapPanel>
+
+				<Button Content="Add Room" HorizontalAlignment="Stretch"
                         VerticalAlignment="Top"
                         Margin="20 70 20 0"
                         Theme="{StaticResource RoundAccentButtonTheme}"
                         Command="{Binding AddRoomCommand}"/>
-                <TextBlock VerticalAlignment="Top"
+				<TextBlock VerticalAlignment="Top"
                            Margin="20 120 20 0"
                            Text="My Rooms" FontSize="18"/>
-                <ListBox Margin="10 150 10 80" 
+				<ListBox Margin="10 150 10 80"
                          SelectedItem="{Binding SelectedRoom}"
                          ItemsSource="{Binding RoomsInfo}"
                          ItemContainerTheme="{StaticResource RoundListBoxItemTheme}"
                          Background="Transparent">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <Grid Height="52">
-                                <TextBlock Margin="8 4" VerticalAlignment="Center" TextAlignment="Left">
-                                    <Run Text="{Binding Name}" FontSize="16" FontWeight="SemiBold"/>
-                                    <LineBreak/>
-                                    <Run Text="{Binding LastMsg}" FontSize="12"/>
-                                </TextBlock>
-                            </Grid>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-            </Grid>
-            <Grid Grid.Column="1" >
-                <Border Background="{DynamicResource ContentMaskBrush}"
+					<ListBox.ItemTemplate>
+						<DataTemplate>
+							<Grid Height="52">
+								<TextBlock Margin="8 4" VerticalAlignment="Center" TextAlignment="Left">
+									<Run Text="{Binding Name}" FontSize="16" FontWeight="SemiBold"/>
+									<LineBreak/>
+									<Run Text="{Binding LastMsg}" FontSize="12"/>
+								</TextBlock>
+							</Grid>
+						</DataTemplate>
+					</ListBox.ItemTemplate>
+				</ListBox>
+			</Grid>
+			<Grid Grid.Column="1" >
+				<!--Content Mask-->
+				<Border Background="{DynamicResource ContentMaskBrush}"
                         CornerRadius="18 0 0 18"/>
-                <WrapPanel HorizontalAlignment="Left" VerticalAlignment="Top"
-                           Margin="40 20">
-                    <TextBlock
-                        FontSize="22" FontWeight="Bold"
-                        Text="{Binding SelectedRoom.Name,FallbackValue='Welcome to GatitoChat',TargetNullValue='Welcome to GatitoChat'}" />
-                    <Button IsVisible="{Binding SelectedRoom,Converter={x:Static ObjectConverters.IsNotNull}}"
-                            Margin="8 0 0 0"
-                            Command="{Binding LeaveRoomCommand}"
-                            Theme="{StaticResource RoundButtonTheme}">
-                        Leave
-                    </Button>
-                </WrapPanel>
-                
-                <ScrollViewer Margin="0 60 8 180">
-                    <ItemsControl Margin="12 0 12 0" ItemsSource="{Binding SelectedRoom.Messages,FallbackValue=''}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <local:ChatBubble Message="{Binding}"/>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </ScrollViewer>
-                
-                <TextBox Watermark="Say meow~"
-                         HorizontalAlignment="Stretch" VerticalAlignment="Bottom"
-                         Margin="40 0 40 60"
-                         Height="120"
-                         Text="{Binding Message}"
+				<!--Copyright Info-->
+				<TextBlock VerticalAlignment="Bottom" Margin="0 0 0 18" Opacity="0.2" TextAlignment="Center" FontSize="12">
+					© 2025 TwilightLemon Powered by AvaloniaUI on .NET 9
+				</TextBlock>
+				
+				<Panel IsVisible="{Binding SelectedRoom,Converter={x:Static ObjectConverters.IsNull}}">
+					<TextBlock HorizontalAlignment="Right" Margin="100 80 40 0" Text="Welcome to Gatito Chat! 😺" TextWrapping="Wrap"
+							   FontSize="64" Opacity="0.5"/>
+				</Panel>
+				
+				<Panel IsVisible="{Binding SelectedRoom,Converter={x:Static ObjectConverters.IsNotNull}}">
+					<WrapPanel HorizontalAlignment="Left" VerticalAlignment="Top"
+							   Margin="40 20">
+						<TextBlock
+							FontSize="22" FontWeight="Bold"
+							Text="{Binding SelectedRoom.Name,FallbackValue='Welcome to GatitoChat',TargetNullValue='You have found a bug here 😿'}" />
+						<Button IsVisible="{Binding SelectedRoom,Converter={x:Static ObjectConverters.IsNotNull}}"
+								Margin="18 0 0 0"
+								Command="{Binding LeaveRoomCommand}"
+								Theme="{StaticResource RoundButtonTheme}">
+							Leave
+						</Button>
+					</WrapPanel>
+
+					<ScrollViewer Margin="0 60 8 180">
+						<ItemsControl Margin="12 0 12 0" ItemsSource="{Binding SelectedRoom.Messages,FallbackValue=''}">
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<local:ChatBubble Message="{Binding}"/>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+					</ScrollViewer>
+
+					<TextBox x:Name="MessageInputTb" Watermark="Say meow~"
+							 HorizontalAlignment="Stretch" VerticalAlignment="Bottom"
+							 Margin="40 0 40 60"
+							 Height="120"
+							 Text="{Binding Message}"
                          
-                         IsEnabled="{Binding SelectedRoom,Converter={x:Static ObjectConverters.IsNotNull}}"
-                         AcceptsReturn="True"
-                         TextWrapping="Wrap"
+							 IsEnabled="{Binding SelectedRoom,Converter={x:Static ObjectConverters.IsNotNull}}"
+							 AcceptsReturn="True"
+							 TextWrapping="Wrap"
                          
-                         Padding="12"
-                         Background="{DynamicResource MaskBrush}"
-                         BorderThickness="0" CornerRadius="18">
-                    <TextBox.Styles>
-                        <Style Selector="TextBox:focus">
-                            <Setter Property="BorderThickness" Value="2"/>
-                        </Style>
-                    </TextBox.Styles>
-                </TextBox>
-                <Button HorizontalAlignment="Right" VerticalAlignment="Bottom"
-                        Margin="0 0 40 14"
-                        Command="{Binding SendMessageCommand}"
-                        Theme="{StaticResource RoundAccentButtonTheme}">
-                    Send
-                </Button>
-            </Grid>
-        </Grid>
-    </Panel>
+							 Padding="12"
+							 Background="{DynamicResource MaskBrush}"
+							 BorderThickness="0" CornerRadius="18">
+						<TextBox.Styles>
+							<Style Selector="TextBox:focus">
+								<Setter Property="BorderThickness" Value="2"/>
+							</Style>
+						</TextBox.Styles>
+					</TextBox>
+					<Button HorizontalAlignment="Right" VerticalAlignment="Bottom"
+							Margin="0 0 40 14"
+							Command="{Binding SendMessageCommand}"
+							Theme="{StaticResource RoundAccentButtonTheme}">
+						Send
+					</Button>
+				</Panel>
+			</Grid>
+		</Grid>
+	</Panel>
 </Window>

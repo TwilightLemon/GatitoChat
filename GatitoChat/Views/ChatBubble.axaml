@@ -9,6 +9,7 @@
        <Border x:Name="MsgContainer" HorizontalAlignment="Left" VerticalAlignment="Stretch"
                Margin="0 24 40 0" Padding="8"
                CornerRadius="8"
+			   
                Background="{DynamicResource MaskBrush}">
            <TextBlock x:Name="MsgTb" TextWrapping="Wrap"/>
        </Border>

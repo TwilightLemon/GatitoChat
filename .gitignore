@@ -1,0 +1,8 @@
+.idea/
+.vs/
+GatitoChat/bin/
+GatitoChat/obj/
+GatitoChat.Core/bin/
+GatitoChat.Core/obj/
+*.csproj.user
+*.sln.*.user

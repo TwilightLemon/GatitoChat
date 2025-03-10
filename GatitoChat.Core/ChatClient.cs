@@ -89,6 +89,10 @@ public class ChatClient:IDisposable
             }));
             await ws.SendAsync(new ArraySegment<byte>(bytes), WebSocketMessageType.Text, true, CancellationToken.None);
         }
+        else
+        {
+            OnConnectionFailed?.Invoke();
+        }
     }
 
     public Task ChatMessage(string roomHash, string message)

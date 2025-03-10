@@ -15,6 +15,7 @@ public partial class AddRoomWindowViewModel(ChatClientService chatClientService)
     [RelayCommand]
     private async Task CheckRoom()
     {
+        if (string.IsNullOrWhiteSpace(RoomName)) return;
         await chatClientService.JoinRoom(RoomName);
         OnAddedRoom?.Invoke();
     }

@@ -1,9 +1,10 @@
-﻿using System.Threading.Tasks;
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using GatitoChat.Services;
 using GatitoChat.ViewModels;
+using System;
+using System.Threading.Tasks;
 
 namespace GatitoChat.Views;
 
@@ -25,5 +26,11 @@ public partial class LoginWindow : Window
         _userProfileService.OnLoginCallback -= UserProfileService_OnLogin;
         await Task.Delay(1500);
         Close();
+    }
+
+    protected override void OnOpened(EventArgs e)
+    {
+        base.OnOpened(e);
+        EmailInputTb.Focus();
     }
 }

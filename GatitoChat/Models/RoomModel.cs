@@ -10,7 +10,7 @@ public partial class RoomModel(string name,string hashId):ObservableObject
 {
     [ObservableProperty] private string _name = name;
     [ObservableProperty] private string _hashId = hashId;
-    [ObservableProperty] private string _lastMsg = "Welcome to GatitoChat"; //for demo use
+    [ObservableProperty] private string _lastMsg = "::Disconnected"; //for demo use
 
     public ObservableCollection<MessageItem> Messages { get; set; } = [];
 }

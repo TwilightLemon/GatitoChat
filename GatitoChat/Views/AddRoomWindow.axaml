@@ -3,6 +3,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:GatitoChat.ViewModels"
+		xmlns:behavior="using:GatitoChat.Behaviors"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="GatitoChat.Views.AddRoomWindow"
         Title="AddRoomWindow"
@@ -25,15 +26,19 @@
                     MaterialOpacity="{DynamicResource WindowMaskOpacity}" />
             </ExperimentalAcrylicBorder.Material>
         </ExperimentalAcrylicBorder>
-        <TextBox HorizontalAlignment="Stretch" 
+        <TextBox x:Name="RoomNameInputTb" HorizontalAlignment="Stretch" 
                  VerticalAlignment="Center"
                  Watermark="Room Name"
+                 Classes="input"
+                 behavior:KeyEnterBehavior.Command="{Binding CheckRoomCommand}"
                  Text="{Binding RoomName}"
-                 Margin="20 0 20 30"/>
+                 Margin="20 0 20 30">
+        </TextBox>
         <Button HorizontalAlignment="Center"
                 VerticalAlignment="Center"
+                Theme="{DynamicResource RoundAccentButtonTheme}"
                 Margin="0 80 0 0"
-                Padding="12,8"
+                Padding="18,8"
                 Command="{Binding CheckRoomCommand}">Add</Button>
     </Panel>
 </Window>

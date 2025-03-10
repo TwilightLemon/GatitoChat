@@ -3,8 +3,16 @@
     <Design.PreviewWith>
         <Border Padding="20">
             <!-- Add Controls for Previewer Here -->
+            <TextBox Classes="input"/>
         </Border>
     </Design.PreviewWith>
-
+    <Style Selector="TextBox.input">
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="CornerRadius" Value="8"/>
+        <Setter Property="Background" Value="{DynamicResource MaskBrush}"/>
+        <Style Selector="^:focus">
+            <Setter Property="BorderThickness" Value="2"/>
+        </Style>
+    </Style>
     <!-- Add Styles Here -->
 </Styles>
