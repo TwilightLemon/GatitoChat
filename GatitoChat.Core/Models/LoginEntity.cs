@@ -2,6 +2,9 @@
 
 namespace GatitoChat.Core.Models;
 
+/// <summary>
+/// Auth Server: Login
+/// </summary>
 public sealed class LoginEntity
 {
     [JsonPropertyName("uid")] 

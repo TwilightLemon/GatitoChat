@@ -1,5 +1,6 @@
 ﻿using System.Net.Http.Json;
 using System.Text;
+using System.Text.Json;
 using GatitoChat.Core.Models;
 using GatitoChat.Core.Security;
 
@@ -10,8 +11,11 @@ public class AuthenticationClient(HttpClient hc,string endpoint)
     public async Task<LoginResponse?> CheckUser(string uid)
     {
         var blindUid = PBCUtils.BlindUid(uid);
-        var response = await hc.PostAsJsonAsync(endpoint + "check", new LoginEntity(){Uid = blindUid,Rnd = "query"});
-        return await response.Content.ReadFromJsonAsync<LoginResponse>();
+        var msg = new LoginEntity() { Uid = blindUid, Rnd = "query" };
+        var content=JsonContent.Create(msg, AppJsonContext.Default.LoginEntity);
+        var response = await hc.PostAsync(endpoint + "check", content);
+        var json = await response.Content.ReadAsStringAsync();
+        return JsonSerializer.Deserialize(json, AppJsonContext.Default.LoginResponse);
     }
     
     public async Task<(bool,RegisterEntity?)> Register(string username, string pw,string uid)
@@ -19,13 +23,15 @@ public class AuthenticationClient(HttpClient hc,string endpoint)
         var (_,pkSign) = PBCUtils.KeyGen(pw);
         Console.WriteLine("pkSign: "+pkSign);
         var blindUid = PBCUtils.BlindUid(uid);
-        var response = await hc.PostAsJsonAsync(endpoint+"register", new RegisterEntity()
+        var msg = new RegisterEntity()
         {
             Name = username,
             Uid = blindUid,
             PkSign = pkSign
-        });
-        var dt = await response.Content.ReadFromJsonAsync<RegisterEntity>();
+        };
+        var content=JsonContent.Create(msg,AppJsonContext.Default.RegisterEntity);
+        var response = await hc.PostAsync(endpoint+"register",content);
+        var dt = JsonSerializer.Deserialize(await response.Content.ReadAsStringAsync(),AppJsonContext.Default.RegisterEntity);
         bool success = dt!=null&&dt.Uid==blindUid&&dt.PkSign==pkSign&&dt.Name==username;
         return (success,dt);
     }
@@ -42,11 +48,15 @@ public class AuthenticationClient(HttpClient hc,string endpoint)
         var sign = Sign(pw, uid);
         var blindUid = PBCUtils.BlindUid(uid);
         var randomSeed = PBCUtils.GenerateRandomString(32);
-        var response = await hc.PostAsJsonAsync(endpoint+"login", new LoginEntity()
+        var msg = new LoginEntity()
         {
-            Sign = sign,Uid=blindUid,Rnd =randomSeed
-        });
-        var result= await response.Content.ReadFromJsonAsync<LoginResponse>();
+            Sign = sign,
+            Uid = blindUid,
+            Rnd = randomSeed
+        };
+        var content = JsonContent.Create(msg, AppJsonContext.Default.LoginEntity);
+        var response = await hc.PostAsync(endpoint+"login",content);
+        var result= JsonSerializer.Deserialize(await response.Content.ReadAsStringAsync(), AppJsonContext.Default.LoginResponse);
         if (result is { UserName: not null, Token: not null })
             return new(result.UserName, blindUid, result.Token, randomSeed, sign);
         return null;

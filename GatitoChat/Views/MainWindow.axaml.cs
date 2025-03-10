@@ -10,5 +10,11 @@ public partial class MainWindow : Window
     {
         DataContext =  viewModel;
         InitializeComponent();
+        Closing += MainWindow_Closing;
+    }
+
+    private async void MainWindow_Closing(object? sender, WindowClosingEventArgs e)
+    {
+        await App.GetRequiredService<ChatClientService>().CloseAll();
     }
 }

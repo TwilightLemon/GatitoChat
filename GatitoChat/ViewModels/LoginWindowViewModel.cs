@@ -26,8 +26,8 @@ public partial class LoginWindowViewModel
 
     public string? Username { get; set; }
 
-    public string AuthServerUrl { get; set; } = "http://127.0.0.1:3000/user/";
-    public string ChatServerUri { get; set; } = "ws://127.0.0.1:8080/";
+    public string AuthServerUrl { get; set; } = "https://auth.twlmgatito.cn/user/";
+    public string ChatServerUri { get; set; } = "ws://crispy-yodel-77pj47v9pxxhv9w-8080.app.github.dev/";
 
     [ObservableProperty] private bool _isCheckedUser;
     [ObservableProperty] private bool _isUserExisting;

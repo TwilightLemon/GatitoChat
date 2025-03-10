@@ -8,9 +8,7 @@ namespace GatitoChat.Core.Models;
 [JsonSerializable(typeof(RegisterEntity))]
 [JsonSerializable(typeof(LoginEntity))]
 [JsonSerializable(typeof(RegisterEntity))]
-[JsonSerializable(typeof(VerificationEntity))]
-[JsonSerializable(typeof(ActionResponse))]
-[JsonSerializable(typeof(RoomManageEntity))]
+[JsonSerializable(typeof(LoginResponse))]
 [JsonSourceGenerationOptions]
 internal partial class AppJsonContext : JsonSerializerContext
 {

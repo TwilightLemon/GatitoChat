@@ -7,7 +7,7 @@
         x:Class="GatitoChat.Views.AddRoomWindow"
         Title="AddRoomWindow"
         CanResize="False"
-        Topmost="True"
+        WindowStartupLocation="CenterOwner"
         ShowInTaskbar="False"
         Background="Transparent"
         TransparencyLevelHint="AcrylicBlur"
@@ -22,7 +22,7 @@
                     BackgroundSource="Digger"
                     TintColor="{DynamicResource AcrylicTintColor}"
                     TintOpacity="1"
-                    MaterialOpacity="0.85" />
+                    MaterialOpacity="{DynamicResource WindowMaskOpacity}" />
             </ExperimentalAcrylicBorder.Material>
         </ExperimentalAcrylicBorder>
         <TextBox HorizontalAlignment="Stretch" 

@@ -23,5 +23,5 @@ public sealed class MessageEntity
     [JsonPropertyName("type")]
     public string Type { get; set; }=MessageType.Chat;
     [JsonPropertyName("message")]
-    public string Message { get; set; }=string.Empty;
+    public string CipherMsg { get; set; }=string.Empty;
 }

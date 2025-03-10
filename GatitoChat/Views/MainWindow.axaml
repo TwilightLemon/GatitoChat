@@ -19,7 +19,7 @@
                     BackgroundSource="Digger"
                     TintColor="{DynamicResource AcrylicTintColor}"
                     TintOpacity="1"
-                    MaterialOpacity="0.85" />
+                    MaterialOpacity="{DynamicResource WindowMaskOpacity}" />
             </ExperimentalAcrylicBorder.Material>
         </ExperimentalAcrylicBorder>
         
@@ -32,12 +32,19 @@
                 <!--Icon & Tittle-->
                 <TextBlock Margin="20" Text="🐱" FontSize="24"/>
                 <TextBlock Margin="60 24 0 0" FontSize="24" FontWeight="Bold">Gatito Chat</TextBlock>
-                <Button HorizontalAlignment="Center" VerticalAlignment="Bottom"
-                        Margin="12 0 12 20"
-                        Theme="{StaticResource RoundButtonTheme}"
+
+                <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Bottom"
+                           Margin="12 0 12 20">
+                    <Button Theme="{StaticResource RoundButtonTheme}"
                         Command="{Binding LoginCommand}"
-                        Content="{Binding LoginBtnHint}">
-                </Button>
+                        Content="{Binding LoginBtnHint}"/>
+                    <Button Theme="{StaticResource RoundAccentButtonTheme}"
+                            Margin="8 0 0 0"
+                            Command="{Binding ReconnectCommand}"
+                            Content="Reconnect"
+                            IsVisible="{Binding IsConnectionFailed}"/>
+                </WrapPanel>
+                
                 <Button Content="Add Room" HorizontalAlignment="Stretch" 
                         VerticalAlignment="Top"
                         Margin="20 70 20 0"
@@ -80,8 +87,8 @@
                     </Button>
                 </WrapPanel>
                 
-                <ScrollViewer Margin="0 50 8 180">
-                    <ItemsControl Margin="12 0 12 0" ItemsSource="{Binding SelectedRoom.Messages,FallbackValue={x:Null}}">
+                <ScrollViewer Margin="0 60 8 180">
+                    <ItemsControl Margin="12 0 12 0" ItemsSource="{Binding SelectedRoom.Messages,FallbackValue=''}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <local:ChatBubble Message="{Binding}"/>

@@ -34,6 +34,7 @@ public partial class ChatBubble : UserControl
 
     private void Refresh(MessageItem value)
     {
+        if (value == null) return;
         if (value.Type == SenderType.System)
         {
             Username.IsVisible = false;
@@ -45,6 +46,7 @@ public partial class ChatBubble : UserControl
             MsgContainer.HorizontalAlignment = Username.HorizontalAlignment = HorizontalAlignment.Right;
             MsgContainer.Margin = new Thickness(40,24,0,0);
             MsgContainer.Bind(BackgroundProperty,Resources.GetResourceObservable("AccentButtonBackground"));
+            MsgTb.Foreground = Brushes.GhostWhite;
         }
 
         Username.Text = value.Name;

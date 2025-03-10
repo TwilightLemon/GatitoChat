@@ -3,6 +3,7 @@ using System.Net.WebSockets;
 using System.Text;
 using System.Text.Json;
 using GatitoChat.Core.Models;
+using GatitoChat.Core.Security;
 
 namespace GatitoChat.Core;
 
@@ -10,22 +11,30 @@ public class ChatClient:IDisposable
 {
     private ClientWebSocket? ws;
     private Task? receiveTask;
-    public UserCredential UserInfo { get; set; }    
-    public event Action? OnConnectionFailed, OnConnectionSuccess, OnConnectionClosed;
+    public UserCredential UserInfo { get; set; }
+    public event Action? OnConnectionFailed, OnConnectionSucceeded;
     public delegate void MessageReceivedHandler(MessageResponse msg);
     public event MessageReceivedHandler? OnMessageReceived;
     public async Task Connect(string connectionUri)
     {
-        var uri = new Uri(connectionUri);
-        ws = new();
-        await ws.ConnectAsync(uri, CancellationToken.None);
-        if (ws.State != WebSocketState.Open)
+        try
+        {
+            var uri = new Uri(connectionUri);
+            ws = new();
+            await ws.ConnectAsync(uri, CancellationToken.None);
+            if (ws.State != WebSocketState.Open)
+            {
+                OnConnectionFailed?.Invoke();
+                return;
+            }
+            else OnConnectionSucceeded?.Invoke();
+        }
+        catch
         {
             OnConnectionFailed?.Invoke();
             return;
         }
-        else OnConnectionSuccess?.Invoke();
-
+        //connect successfully, begin to receive data.
         receiveTask = ReceiveMessage();
     }
     private static string StringifyMsgBody(MessageEntity body)
@@ -42,7 +51,8 @@ public class ChatClient:IDisposable
             var result = await ws.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
             if (result.MessageType == WebSocketMessageType.Close)
             {
-                //the server rejected.
+                //the server rejected. (usually for invalid token)
+                OnConnectionFailed?.Invoke();
                 break;
             }
             var msg = Encoding.UTF8.GetString(buffer, 0, result.Count);
@@ -51,7 +61,15 @@ public class ChatClient:IDisposable
             {
                 string total = sb.ToString();
                 var body=JsonSerializer.Deserialize(total, AppJsonContext.Default.MessageResponse);
-                OnMessageReceived?.Invoke(body);
+                if (body is not null)
+                {
+                    if (body.Type == MessageType.Chat)
+                    {
+                        body.Message = AesUtils.Decrypt(body.Message);
+                    }
+                    OnMessageReceived?.Invoke(body);
+                }
+
                 sb.Clear();
             }
         }
@@ -64,14 +82,17 @@ public class ChatClient:IDisposable
         {
             var bytes = Encoding.UTF8.GetBytes(StringifyMsgBody(new()
             {
-                Name = UserInfo.Username,SenderId = UserInfo.BlindedUid,Token = UserInfo.Token,RoomHash = roomHash,Type = type,Message = message,Sign = UserInfo.Sign
+                Name = UserInfo.Username,SenderId = UserInfo.BlindedUid,
+                Token = UserInfo.Token,RoomHash = roomHash,
+                Type = type,CipherMsg = message,
+                Sign = UserInfo.Sign
             }));
             await ws.SendAsync(new ArraySegment<byte>(bytes), WebSocketMessageType.Text, true, CancellationToken.None);
         }
     }
 
     public Task ChatMessage(string roomHash, string message)
-        =>SendMessage(roomHash,MessageType.Chat, message);
+        =>SendMessage(roomHash,MessageType.Chat, AesUtils.Encrypt(message));
     public Task JoinRoom(string roomHash)
         =>SendMessage(roomHash,MessageType.Join,"");
 
@@ -88,7 +109,6 @@ public class ChatClient:IDisposable
                     }),
                     CancellationToken.None);
         ws.Dispose();
-        OnConnectionClosed?.Invoke();
     }
 
     public void Dispose()

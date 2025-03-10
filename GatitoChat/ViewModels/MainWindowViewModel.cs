@@ -23,7 +23,26 @@ public partial class MainWindowViewModel : ViewModelBase
         _userProfileService = userProfileService;
         _chatClientService = chatClientService;
         RoomsInfo = chatClientService.Rooms;
+        chatClientService.OnConnectionFailed += ChatClientService_OnConnectionFailed;
+        chatClientService.OnConnectionSucceeded += ChatClientService_OnConnectionSucceeded;
         userProfileService.OnLoginCallback += UserProfileService_OnLoginCallback;
+    }
+
+    [ObservableProperty] private bool _isConnectionFailed=false;//usually assume connection succeed. 
+    private void ChatClientService_OnConnectionFailed()
+    {
+        IsConnectionFailed = true;
+    }
+    
+    private void ChatClientService_OnConnectionSucceeded()
+    {
+        IsConnectionFailed = false;
+    }
+
+    [RelayCommand]
+    private async Task Reconnect()
+    {
+        await _chatClientService.ReConnect();
     }
 
     private void UserProfileService_OnLoginCallback()
@@ -35,7 +54,7 @@ public partial class MainWindowViewModel : ViewModelBase
     [RelayCommand]
     private void Login()
     {
-        App.GetRequiredService<LoginWindow>().Show();
+        App.GetRequiredService<LoginWindow>().ShowDialog(App.MainWindow);
     }
 
     public ObservableCollection<RoomModel> RoomsInfo { get; }
@@ -44,7 +63,7 @@ public partial class MainWindowViewModel : ViewModelBase
     [RelayCommand]
     private void AddRoom()
     {
-        App.GetRequiredService<AddRoomWindow>().Show();
+        App.GetRequiredService<AddRoomWindow>().ShowDialog(App.MainWindow);
     }
 
     [RelayCommand]
