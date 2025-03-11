@@ -11,11 +11,12 @@ public class ChatClient:IDisposable
 {
     private ClientWebSocket? ws;
     private Task? receiveTask;
+    private CancellationTokenSource? _cts;
     public UserCredential UserInfo { get; set; }
     public event Action? OnConnectionFailed, OnConnectionSucceeded;
     public delegate void MessageReceivedHandler(MessageResponse msg);
     public event MessageReceivedHandler? OnMessageReceived;
-    public async Task Connect(string connectionUri)
+    public async Task ConnectAsync(string connectionUri)
     {
         try
         {
@@ -35,20 +36,21 @@ public class ChatClient:IDisposable
             return;
         }
         //connect successfully, begin to receive data.
-        receiveTask = ReceiveMessage();
+        _cts = new();
+        receiveTask = ReceiveMessage(_cts.Token);
     }
     private static string StringifyMsgBody(MessageEntity body)
         =>JsonSerializer.Serialize(body,AppJsonContext.Default.MessageEntity);
     private static string StringifyExitMsgBody(ExitEntity body)
         =>JsonSerializer.Serialize(body,AppJsonContext.Default.ExitEntity);
-    private async Task ReceiveMessage()
+    private async Task ReceiveMessage(CancellationToken cancellationToken)
     {
         if (ws == null) return;
         var buffer = new byte[1024 * 4];
         var sb = new StringBuilder();
-        while (ws.State == WebSocketState.Open)
+        while (ws.State == WebSocketState.Open && !cancellationToken.IsCancellationRequested)
         {
-            var result = await ws.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+            var result = await ws.ReceiveAsync(new ArraySegment<byte>(buffer), cancellationToken);
             if (result.MessageType == WebSocketMessageType.Close)
             {
                 //the server rejected. (usually for invalid token)
@@ -87,7 +89,7 @@ public class ChatClient:IDisposable
                 Type = type,CipherMsg = message,
                 Sign = UserInfo.Sign
             }));
-            await ws.SendAsync(new ArraySegment<byte>(bytes), WebSocketMessageType.Text, true, CancellationToken.None);
+            await ws.SendAsync(new ArraySegment<byte>(bytes), WebSocketMessageType.Text, true,_cts!.Token);
         }
         else
         {
@@ -111,7 +113,7 @@ public class ChatClient:IDisposable
                     {
                         Name = UserInfo.Username,RoomIds = roomHashes
                     }),
-                    CancellationToken.None);
+                    _cts!.Token);
         ws.Dispose();
     }
 
@@ -119,5 +121,7 @@ public class ChatClient:IDisposable
     {
         ws?.Dispose();
         receiveTask?.Dispose();
+        _cts?.Cancel();
+        _cts?.Dispose();
     }
 }

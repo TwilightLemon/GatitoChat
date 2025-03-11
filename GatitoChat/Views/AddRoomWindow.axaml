@@ -26,19 +26,36 @@
                     MaterialOpacity="{DynamicResource WindowMaskOpacity}" />
             </ExperimentalAcrylicBorder.Material>
         </ExperimentalAcrylicBorder>
-        <TextBox x:Name="RoomNameInputTb" HorizontalAlignment="Stretch" 
-                 VerticalAlignment="Center"
-                 Watermark="Room Name"
-                 Classes="input"
-                 behavior:KeyEnterBehavior.Command="{Binding CheckRoomCommand}"
-                 Text="{Binding RoomName}"
-                 Margin="20 0 20 30">
-        </TextBox>
-        <Button HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Theme="{DynamicResource RoundAccentButtonTheme}"
-                Margin="0 80 0 0"
-                Padding="18,8"
-                Command="{Binding CheckRoomCommand}">Add</Button>
+		<!--Choose method: remote or local-->
+		<Panel IsVisible="{Binding !ChosenRemote}">
+			<StackPanel VerticalAlignment="Center" HorizontalAlignment="Stretch"
+			            Margin="40 0">
+				<Button Theme="{StaticResource RoundButtonTheme}"
+				        Command="{Binding ChooseLocalRoomCommand}">
+					Local
+				</Button>
+				<Button Theme="{StaticResource RoundAccentButtonTheme}"
+				        Command="{Binding ChooseRemoteRoomCommand}"
+				        Margin="0 30 0 0">
+					Remote
+				</Button>
+			</StackPanel>
+		</Panel>
+		<Panel IsVisible="{Binding ChosenRemote}">
+			<TextBox x:Name="RoomNameInputTb" HorizontalAlignment="Stretch"
+					 VerticalAlignment="Center"
+					 Watermark="Room Name"
+					 Classes="input"
+					 behavior:KeyEnterBehavior.Command="{Binding CheckRoomCommand}"
+					 Text="{Binding RoomName}"
+					 Margin="20 0 20 30">
+			</TextBox>
+			<Button HorizontalAlignment="Center"
+					VerticalAlignment="Center"
+					Theme="{DynamicResource RoundAccentButtonTheme}"
+					Margin="0 80 0 0"
+					Padding="18,8"
+					Command="{Binding CheckRoomCommand}">Add</Button>
+		</Panel>
     </Panel>
 </Window>

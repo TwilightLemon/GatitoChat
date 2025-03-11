@@ -48,8 +48,12 @@ public partial class App : Application
         services.AddTransient<AddRoomWindow>();
         services.AddTransient<AddRoomWindowViewModel>();
 
+        services.AddTransient<AddLocalServerWindow>();
+        services.AddTransient<AddLocalServerWindowViewModel>();
+
         services.AddSingleton<UserProfileService>();
         services.AddSingleton<ChatClientService>();
+        services.AddSingleton<LocalChatService>();
     }
     public static T GetRequiredService<T>() where T : notnull => _host!.Services.GetRequiredService<T>();
     public static MainWindow MainWindow => _host!.Services.GetRequiredService<MainWindow>();

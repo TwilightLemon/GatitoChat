@@ -10,18 +10,19 @@ using GatitoChat.Services;
 using GatitoChat.Views;
 
 namespace GatitoChat.ViewModels;
-/*
- * TODO: 封装ChatClient和AuthClient到Service, 这里只做响应
- */
 public partial class MainWindowViewModel : ViewModelBase
 {
     private readonly UserProfileService _userProfileService;
     private readonly ChatClientService _chatClientService;
+    private readonly LocalChatService _localChatService;
 
-    public MainWindowViewModel(UserProfileService userProfileService, ChatClientService chatClientService)
+    public MainWindowViewModel(UserProfileService userProfileService,
+        ChatClientService chatClientService,
+        LocalChatService localChatService)
     {
         _userProfileService = userProfileService;
         _chatClientService = chatClientService;
+        _localChatService = localChatService;
         RoomsInfo = chatClientService.Rooms;
         chatClientService.OnConnectionFailed += ChatClientService_OnConnectionFailed;
         chatClientService.OnConnectionSucceeded += ChatClientService_OnConnectionSucceeded;
@@ -70,7 +71,10 @@ public partial class MainWindowViewModel : ViewModelBase
     private async Task LeaveRoom()
     {
         if (SelectedRoom == null) return;
-        await _chatClientService.LeaveRoom(SelectedRoom);
+        if (SelectedRoom.IsLocalRoom)
+            _localChatService.LeaveLocalRoom();
+        else await _chatClientService.LeaveRoom(SelectedRoom);
+        
         SelectedRoom = null;
     }
     
@@ -80,7 +84,9 @@ public partial class MainWindowViewModel : ViewModelBase
     private async Task SendMessage()
     {
         if(string.IsNullOrWhiteSpace(Message)||SelectedRoom==null)return;
-        await _chatClientService.SendMessage(SelectedRoom,Message);
+        if (SelectedRoom.IsLocalRoom)
+            await _localChatService.SendMessageAsync(Message);
+        else await _chatClientService.SendMessage(SelectedRoom,Message);
         Message = "";
     }
 }

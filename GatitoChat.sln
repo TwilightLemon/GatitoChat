@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GatitoChat", "GatitoChat\Ga
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GatitoChat.Core", "GatitoChat.Core\GatitoChat.Core.csproj", "{D8AC1C09-1DF8-4156-BC84-2FE3151A6086}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GatitoChat.Local", "GatitoChat.Local\GatitoChat.Local.csproj", "{C572FFB8-0EE2-48CB-9367-6BD974E01923}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{D8AC1C09-1DF8-4156-BC84-2FE3151A6086}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D8AC1C09-1DF8-4156-BC84-2FE3151A6086}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D8AC1C09-1DF8-4156-BC84-2FE3151A6086}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C572FFB8-0EE2-48CB-9367-6BD974E01923}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C572FFB8-0EE2-48CB-9367-6BD974E01923}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C572FFB8-0EE2-48CB-9367-6BD974E01923}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C572FFB8-0EE2-48CB-9367-6BD974E01923}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

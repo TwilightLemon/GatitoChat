@@ -11,6 +11,6 @@ public partial class RoomModel(string name,string hashId):ObservableObject
     [ObservableProperty] private string _name = name;
     [ObservableProperty] private string _hashId = hashId;
     [ObservableProperty] private string _lastMsg = "::Disconnected"; //for demo use
-
+    [ObservableProperty] private bool _isLocalRoom = false;
     public ObservableCollection<MessageItem> Messages { get; set; } = [];
 }

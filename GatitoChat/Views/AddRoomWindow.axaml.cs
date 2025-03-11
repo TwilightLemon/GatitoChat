@@ -11,7 +11,7 @@ public partial class AddRoomWindow : Window
     public AddRoomWindow(AddRoomWindowViewModel vm)
     {
         DataContext=_vm = vm;
-        vm.OnAddedRoom += Vm_AddRoomSuccess;
+        vm.RequestCloseWindow += Vm_AddRoomSuccess;
         InitializeComponent();
     }
     protected override void OnOpened(EventArgs e)
@@ -22,6 +22,7 @@ public partial class AddRoomWindow : Window
 
     private void Vm_AddRoomSuccess()
     {
+        _vm.RequestCloseWindow -= Vm_AddRoomSuccess;
         Close();
     }
 }

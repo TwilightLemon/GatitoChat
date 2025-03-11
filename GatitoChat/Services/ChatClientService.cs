@@ -47,10 +47,10 @@ public class ChatClientService
     private async void UserProfileService_OnLogin()
     {
         _chatClient.UserInfo = _userProfileService.Credential!;
-        await _chatClient.Connect(_userProfileService.ChatServerUri);
+        await _chatClient.ConnectAsync(_userProfileService.ChatServerUri);
     }
     
-    public Task ReConnect()=>_chatClient.Connect(_userProfileService.ChatServerUri);
+    public Task ReConnect()=>_chatClient.ConnectAsync(_userProfileService.ChatServerUri);
 
     public async Task JoinRoom(string roomName)
     {
