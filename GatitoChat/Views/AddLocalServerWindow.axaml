@@ -1,0 +1,55 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:GatitoChat.ViewModels"
+        xmlns:behavior="clr-namespace:GatitoChat.Behaviors"
+        mc:Ignorable="d"
+        x:Class="GatitoChat.Views.AddLocalServerWindow"
+        CanResize="False"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False"
+        Background="Transparent"
+        Height="520"
+        Width="400"
+        x:DataType="vm:AddLocalServerWindowViewModel"
+        TransparencyLevelHint="AcrylicBlur"
+        ExtendClientAreaToDecorationsHint="True"
+        Title="Create or join a local server">
+    <Panel>
+        <ExperimentalAcrylicBorder IsHitTestVisible="False">
+            <ExperimentalAcrylicBorder.Material>
+                <ExperimentalAcrylicMaterial
+                    BackgroundSource="Digger"
+                    TintColor="{DynamicResource AcrylicTintColor}"
+                    TintOpacity="1"
+                    MaterialOpacity="{DynamicResource WindowMaskOpacity}" />
+            </ExperimentalAcrylicBorder.Material>
+        </ExperimentalAcrylicBorder>
+        <ToggleButton VerticalAlignment="Top" HorizontalAlignment="Center"
+                      CornerRadius="12"
+                      IsChecked="{Binding AsServer}"
+                      Margin="0 60 0 0">
+            As Server
+        </ToggleButton>
+        
+        <StackPanel Margin="40 140 40 0">
+            <WrapPanel>
+                <TextBlock Margin="0 8 8 0">ws://</TextBlock>
+                <TextBox Watermark="ip address" Classes="input" Width="120"
+                         Text="{Binding IpAddress}"
+                         IsEnabled="{Binding !AsServer}"/>
+                <TextBox Watermark="port" Width="50" Margin="8 0 0 0"
+                         Text="{Binding Port}"
+                         Classes="input"/>
+            </WrapPanel>
+            <TextBox Classes="input" Watermark="Nickname"
+                     Text="{Binding Nickname}"
+                     behavior:KeyEnterBehavior.Command="{Binding CreateOrJoinCommand}"
+                     Margin="0 20 0 0"/>
+            <Button Theme="{StaticResource RoundAccentButtonTheme}" Margin="0 20 0  0"
+                    Content="{Binding BtnHint}"
+                    Command="{Binding CreateOrJoinCommand}"/>
+        </StackPanel>
+    </Panel>
+</Window>

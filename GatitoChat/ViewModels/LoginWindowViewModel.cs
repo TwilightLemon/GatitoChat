@@ -27,7 +27,7 @@ public partial class LoginWindowViewModel
     public string? Username { get; set; }
 
     public string AuthServerUrl { get; set; } = "https://auth.twlmgatito.cn/user/";
-    public string ChatServerUri { get; set; } = "ws://crispy-yodel-77pj47v9pxxhv9w-8080.app.github.dev/";
+    public string ChatServerUri { get; set; } = "wss://gatitochatserver.azurewebsites.net/";
 
     [ObservableProperty] private bool _isCheckedUser;
     [ObservableProperty] private bool _isUserExisting;

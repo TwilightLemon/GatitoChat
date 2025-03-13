@@ -4,5 +4,7 @@ GatitoChat/bin/
 GatitoChat/obj/
 GatitoChat.Core/bin/
 GatitoChat.Core/obj/
+GatitoChat.Local/bin/
+GatitoChat.Local/obj/
 *.csproj.user
 *.sln.*.user
