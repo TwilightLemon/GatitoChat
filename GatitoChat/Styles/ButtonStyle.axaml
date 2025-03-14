@@ -53,4 +53,30 @@
           <Setter Property="Background" Value="{DynamicResource FocusMaskBrush}" />
       </Style>
   </ControlTheme>
+    <ControlTheme x:Key="IconButtonTheme" TargetType="Button">
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border Name="PART_Border"
+                        Background="{TemplateBinding Background}"
+                        Padding="{TemplateBinding Padding}"
+                        CornerRadius="8">
+                    <ContentPresenter Content="{TemplateBinding Content}"
+                                      ContentTemplate="{TemplateBinding ContentTemplate}"
+                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" />
+                </Border>
+            </ControlTemplate>
+        </Setter>
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Padding" Value="8"/>
+      
+        <Style Selector="^:pressed">
+            <Setter Property="Background" Value="{DynamicResource FocusMaskBrush}" />
+        </Style>
+        <Style Selector="^:pointerover">
+            <Setter Property="Background" Value="{DynamicResource FocusMaskBrush}" />
+        </Style>
+    </ControlTheme>
 </ResourceDictionary>

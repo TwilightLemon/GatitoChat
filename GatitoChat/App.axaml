@@ -20,6 +20,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceInclude Source="Styles/ButtonStyle.axaml"/>
                 <ResourceInclude Source="Styles/ListBoxItemStyle.axaml" />
+                <ResourceInclude Source="Resources/IconData.axaml"/>
             </ResourceDictionary.MergedDictionaries>
             <sys:Double x:Key="WindowMaskOpacity">0.75</sys:Double>
             <!-- 定义主题相关资源 -->

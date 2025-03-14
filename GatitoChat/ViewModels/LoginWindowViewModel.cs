@@ -26,10 +26,22 @@ public partial class LoginWindowViewModel
 
     public string? Username { get; set; }
 
-    public string AuthServerUrl { get; set; } = "https://auth.twlmgatito.cn/user/";
-    public string ChatServerUri { get; set; } = "wss://gatitochatserver.azurewebsites.net/";
+    [ObservableProperty]
+    private string _authServerUrl  = "https://auth.twlmgatito.cn/user/";
+    [ObservableProperty]
+    private string _chatServerUri  = "wss://gatitochatserver.azurewebsites.net/";
+    
+    partial void OnAuthServerUrlChanged(string value)
+    {
+        userProfileService.AuthServerUrl = value;
+    }
+    partial void OnChatServerUriChanged(string value)
+    {
+        userProfileService.ChatServerUri = value;
+    }
 
-    [ObservableProperty] private bool _isCheckedUser;
+    [ObservableProperty]
+    private bool _isCheckedUser;
     [ObservableProperty] private bool _isUserExisting;
     [ObservableProperty] private bool _authenticated;
 

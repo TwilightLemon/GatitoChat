@@ -6,8 +6,8 @@ namespace GatitoChat.Services;
 public class UserProfileService
 {
     public UserCredential? Credential { get;private set; }
-    public string AuthServerUrl { get;private set; }=string.Empty;
-    public string ChatServerUri { get;private set; }=string.Empty;
+    public string AuthServerUrl { get; set; }=string.Empty;
+    public string ChatServerUri { get; set; }=string.Empty;
     public event Action? OnLoginCallback;
     public void Login(UserCredential credential, string authServerUrl, string chatServerUri)
     {

@@ -7,7 +7,7 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="GatitoChat.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Icon="/Assets/avalonia-logo.ico"
+        Icon="/Resources/avalonia-logo.ico"
         Title="GatitoChat"
         Background="Transparent"
         TransparencyLevelHint="AcrylicBlur"
@@ -33,11 +33,17 @@
 				<TextBlock Margin="20" Text="🐱" FontSize="24"/>
 				<TextBlock Margin="60 24 0 0" FontSize="24" FontWeight="Bold">Gatito Chat</TextBlock>
 
-				<WrapPanel HorizontalAlignment="Center" VerticalAlignment="Bottom"
+				<WrapPanel HorizontalAlignment="Stretch" VerticalAlignment="Bottom"
                            Margin="12 0 12 20">
-					<Button Theme="{StaticResource RoundButtonTheme}"
-                        Command="{Binding LoginCommand}"
-                        Content="{Binding LoginBtnHint}"/>
+					<Button Width="42" Height="42" CornerRadius="21"
+					        HorizontalAlignment="Left"
+					        Margin="12 0 0 0"
+							Command="{Binding LoginCommand}"
+							ToolTip.Tip="{Binding LoginBtnHint}">
+						<Path Data="{StaticResource LoginIcon}" Stretch="Uniform"
+						      Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
+						      Width="16" Height="16"/>
+					</Button>
 					<Button Theme="{StaticResource RoundAccentButtonTheme}"
                             Margin="8 0 0 0"
                             Command="{Binding ReconnectCommand}"
@@ -93,9 +99,12 @@
 							Text="{Binding SelectedRoom.Name,FallbackValue='Welcome to GatitoChat',TargetNullValue='You have found a bug here 😿'}" />
 						<Button IsVisible="{Binding SelectedRoom,Converter={x:Static ObjectConverters.IsNotNull}}"
 								Margin="18 0 0 0"
+								ToolTip.Tip="Leave"
 								Command="{Binding LeaveRoomCommand}"
-								Theme="{StaticResource RoundButtonTheme}">
-							Leave
+								Theme="{StaticResource IconButtonTheme}">
+							<Path Data="{StaticResource LeaveIcon}" Stretch="Uniform"
+							      Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
+							      Width="16" Height="16"/>
 						</Button>
 					</WrapPanel>
 

@@ -27,12 +27,16 @@
             </ExperimentalAcrylicBorder.Material>
         </ExperimentalAcrylicBorder>
         <Panel IsVisible="{Binding !Authenticated}">
-            <Button Content="Back" Padding="12 8" Margin="20"
-                    Theme="{StaticResource RoundButtonTheme}"
+            <Button Padding="12 8" Margin="20"
+                    Theme="{StaticResource IconButtonTheme}"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Command="{Binding BackToCheckUserCommand}"
-                    IsVisible="{Binding IsCheckedUser}" />
+                    IsVisible="{Binding IsCheckedUser}" >
+                <Path Data="{StaticResource BackIcon}" Stretch="Uniform"
+                      Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
+                      Width="16" Height="16"/>
+            </Button>
             <StackPanel Margin="20 80 20 20">
                 <TextBlock Text="{Binding Greeting}"
                            FontSize="22" TextAlignment="Center" />
