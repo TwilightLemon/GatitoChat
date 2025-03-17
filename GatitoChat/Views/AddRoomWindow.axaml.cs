@@ -7,6 +7,12 @@ namespace GatitoChat.Views;
 public partial class AddRoomWindow : Window
 {
     private readonly AddRoomWindowViewModel _vm;
+    #if DEBUG
+    public AddRoomWindow()
+    {
+        InitializeComponent();
+    }
+    #endif
 
     public AddRoomWindow(AddRoomWindowViewModel vm)
     {

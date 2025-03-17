@@ -11,6 +11,13 @@ public partial class MainWindow : Window
 {
     private readonly MainWindowViewModel _vm;
 
+    #if DEBUG
+    public MainWindow()
+    {
+        InitializeComponent();
+    }
+    #endif
+    
     public MainWindow(MainWindowViewModel  viewModel)
     {
         DataContext =_vm =  viewModel;

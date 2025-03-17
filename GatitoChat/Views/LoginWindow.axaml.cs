@@ -13,6 +13,12 @@ public partial class LoginWindow : Window
     private readonly UserProfileService _userProfileService;
     private readonly LoginWindowViewModel _viewModel;
 
+    #if DEBUG
+    public LoginWindow()
+    {
+        InitializeComponent();
+    }
+    #endif
     public LoginWindow(LoginWindowViewModel viewModel,UserProfileService userProfileService)
     {
         InitializeComponent();

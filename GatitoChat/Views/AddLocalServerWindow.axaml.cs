@@ -6,6 +6,12 @@ namespace GatitoChat.Views;
 public partial class AddLocalServerWindow : Window
 {
     private readonly AddLocalServerWindowViewModel _viewModel;
+    #if DEBUG
+    public AddLocalServerWindow()
+    {
+        InitializeComponent();
+    }
+    #endif
 
     public AddLocalServerWindow(AddLocalServerWindowViewModel viewModel)
     {
