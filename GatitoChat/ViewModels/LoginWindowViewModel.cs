@@ -27,9 +27,9 @@ public partial class LoginWindowViewModel
     public string? Username { get; set; }
 
     [ObservableProperty]
-    private string _authServerUrl  = "https://auth.twlmgatito.cn/user/";
+    private string _authServerUrl  = userProfileService.AuthServerUrl;
     [ObservableProperty]
-    private string _chatServerUri  = "wss://gatitochatserver.azurewebsites.net/";
+    private string _chatServerUri  =userProfileService.ChatServerUri;
     
     partial void OnAuthServerUrlChanged(string value)
     {

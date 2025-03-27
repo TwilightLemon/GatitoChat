@@ -6,8 +6,8 @@ namespace GatitoChat.Services;
 public class UserProfileService
 {
     public UserCredential? Credential { get;private set; }
-    public string AuthServerUrl { get; set; }=string.Empty;
-    public string ChatServerUri { get; set; }=string.Empty;
+    public string AuthServerUrl { get; set; }= "https://auth.twlmgatito.cn/user/";
+    public string ChatServerUri { get; set; }= "wss://gatitochatserver.azurewebsites.net/chat";
     public event Action? OnLoginCallback;
     public void Login(UserCredential credential, string authServerUrl, string chatServerUri)
     {
