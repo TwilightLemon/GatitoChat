@@ -101,6 +101,7 @@ public class ChatClient:IDisposable
         =>SendMessage(roomHash,MessageType.Chat, AesUtils.Encrypt(message));
     public Task JoinRoom(string roomHash)
         =>SendMessage(roomHash,MessageType.Join,"");
+        // send empty message to join room, if the room is not exist, the server will create it automatically.
 
     public Task LeaveRoom(string roomHash)
         => SendMessage(roomHash, MessageType.Leave, "");

@@ -8,9 +8,18 @@ public enum SenderType{Self,Other,System}
 public record MessageItem(SenderType Type,string Name,string Content);
 public partial class RoomModel(string name,string hashId):ObservableObject
 {
+    /// <summary>
+    /// Room name, used for display.
+    /// </summary>
     [ObservableProperty] private string _name = name;
+    /// <summary>
+    /// Room ID, used for identification and message sending. (same in server and client)
+    /// </summary>
     [ObservableProperty] private string _hashId = hashId;
-    [ObservableProperty] private string _lastMsg = "::Disconnected"; //for demo use
+    /// <summary>
+    /// Last message. Also used for state display.
+    /// </summary>
+    [ObservableProperty] private string _lastMsg = "::Disconnected"; //for init use
     [ObservableProperty] private bool _isLocalRoom = false;
     public ObservableCollection<MessageItem> Messages { get; set; } = [];
 }

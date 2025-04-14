@@ -3,6 +3,9 @@ using GatitoChat.Core.Models;
 
 namespace GatitoChat.Services;
 
+/// <summary>
+/// user credential and server urls provider
+/// </summary>
 public class UserProfileService
 {
     public UserCredential? Credential { get;private set; }

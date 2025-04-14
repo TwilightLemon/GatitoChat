@@ -12,6 +12,9 @@ public class LocalChatService(ChatClientService chatClientService)
     private WsClient? _client;
     private readonly ObservableCollection<RoomModel> _rooms = chatClientService.Rooms;
     private RoomModel? _currentRoom;
+    /// <summary>
+    /// username as an identity
+    /// </summary>
     private string  _nickname=string.Empty;
     
     public async Task<bool> LaunchServer(int port, string nickname)
@@ -21,10 +24,11 @@ public class LocalChatService(ChatClientService chatClientService)
         _server = new(port);
         _server.Start();
         
+        //server also needs to join the room
         return await JoinLocalRoom("127.0.0.1",port,nickname);
     }
 
-    public void CloseServer()
+    private void CloseServer()
     {
         if (_server == null) return;
         _server.Dispose();
@@ -41,12 +45,14 @@ public class LocalChatService(ChatClientService chatClientService)
         var success = await _client.ConnectAsync(uri);
         if (success)
         {
-            _currentRoom = new(uri, "")
+            _currentRoom = new(uri, "")// for a local room, there is no room name or hashId.
             {
                 IsLocalRoom = true,LastMsg = "::LocalRoom"
             };
             _rooms.Add(_currentRoom);
             _nickname = nickname;
+            //JOIN ROOM MESSAGE
+            await _client.JoinRoom(nickname);
             return true;
         }
         return false;
@@ -56,7 +62,9 @@ public class LocalChatService(ChatClientService chatClientService)
     {
         if (_currentRoom == null) return;
         
-        _currentRoom.Messages.Add(new (SenderType.Other,message.Name,message.Message));
+        //the local chat server will not resend the message to the sender, so received message is always from other.
+        // and also the local chat server only supports user message.
+        _currentRoom.Messages.Add(new (message.Type==MessageType.User?SenderType.Other:SenderType.System,message.Name,message.Message));
         _currentRoom.LastMsg = $"{message.Name}: {message.Message}";
     }
 
@@ -64,20 +72,28 @@ public class LocalChatService(ChatClientService chatClientService)
     {
         if (_client != null&&_currentRoom!=null)
         {
-            await _client.SendMessage(_nickname, message);
+            await _client.SendMessage(MessageType.User,_nickname, message);
             _currentRoom.Messages.Add(new (SenderType.Self,_nickname,message));
         }
     }
 
-    public bool LeaveLocalRoom()
+    public async Task<bool> LeaveLocalRoom()
     {
-        if( _client == null ||_currentRoom==null) return false;
-        _client.Dispose();
-        _client = null;
-        _rooms.Remove(_currentRoom);
-        _currentRoom = null;
-        CloseServer();
-        return true;
+        try
+        {
+            if (_client == null || _currentRoom == null) return false;
+            await _client.LeaveRoom(_nickname);
+            _client.Dispose();
+            _client = null;
+            _rooms.Remove(_currentRoom);
+            _currentRoom = null;
+            CloseServer();
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
     }
     
     

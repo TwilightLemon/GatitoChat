@@ -32,20 +32,24 @@ public class ChatClientService
         if (Rooms.FirstOrDefault(r => r.HashId == msg.RoomId) is { } room)
         {
             var type = SenderType.Other;
-            if (msg.Type is MessageType.Join or MessageType.Leave)
+            if (msg.Type is MessageType.Join or MessageType.Leave) //system message
             {
                 type = SenderType.System;
-            }else if (msg.Type is MessageType.Chat && msg.SenderId==_userProfileService.Credential!.BlindedUid)
+            }
+            else if (msg.Type is MessageType.Chat &&
+             msg.SenderId==_userProfileService.Credential!.BlindedUid) //self message. Note that the server will also resend the message to the sender.
             {
                 type = SenderType.Self;
             }
             room.Messages.Add(new MessageItem(type,msg.SenderName,msg.Message));
+            //update last message
             room.LastMsg=$"{msg.SenderName}: {msg.Message}";
         }
     }
 
     private async void UserProfileService_OnLogin()
     {
+        //login success, connect to server
         _chatClient.UserInfo = _userProfileService.Credential!;
         await _chatClient.ConnectAsync(_userProfileService.ChatServerUri);
     }

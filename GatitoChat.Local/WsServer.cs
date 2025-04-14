@@ -4,7 +4,7 @@ namespace GatitoChat.Local;
 //a local server only supports single chat room.(lazy)
 public class WsServer(int port):IDisposable
 {
-    private readonly WebSocketServer _wsServer = new($"ws://127.0.0.1:{port}")
+    private readonly WebSocketServer _wsServer = new($"ws://0.0.0.0:{port}")//使用默认路由而不是回环
     {
         RestartAfterListenError = true
     };

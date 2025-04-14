@@ -12,7 +12,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Remove="Resources\public_key.pem" />
       <EmbeddedResource Include="Resources\public_key.pem" />
     </ItemGroup>
 

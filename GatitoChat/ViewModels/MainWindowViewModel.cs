@@ -72,7 +72,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         if (SelectedRoom == null) return;
         if (SelectedRoom.IsLocalRoom)
-            _localChatService.LeaveLocalRoom();
+            await _localChatService.LeaveLocalRoom();
         else await _chatClientService.LeaveRoom(SelectedRoom);
         
         SelectedRoom = null;

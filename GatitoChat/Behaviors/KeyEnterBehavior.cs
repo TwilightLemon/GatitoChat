@@ -6,6 +6,9 @@ using Avalonia.Input;
 
 namespace GatitoChat.Behaviors;
 
+/// <summary>
+/// Extends the TextBox control to support Enter key event for executing a command.
+/// </summary>
 public class KeyEnterBehavior : AvaloniaObject
 {
     public static readonly AttachedProperty<ICommand> CommandProperty =

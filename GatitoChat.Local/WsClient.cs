@@ -62,12 +62,12 @@ public class WsClient:IDisposable
         }
     }
 
-    public async Task SendMessage(string name,string msg)
+    public async Task SendMessage(MessageType type,string name,string msg)
     {
         if (_ws == null) return;
         if (_ws.State == WebSocketState.Open)
         {
-            var plainText=JsonSerializer.Serialize(new UniversalMessageEntity(name, msg),AppJsonContext.Default.UniversalMessageEntity);
+            var plainText=JsonSerializer.Serialize(new UniversalMessageEntity(type,name, msg),AppJsonContext.Default.UniversalMessageEntity);
             var cipherText =AesUtils.Encrypt(plainText);
             var bytes=Encoding.UTF8.GetBytes(cipherText);
             await _ws.SendAsync(new ArraySegment<byte>(bytes), WebSocketMessageType.Text, true, _cts!.Token);
@@ -77,6 +77,11 @@ public class WsClient:IDisposable
             OnConnectFailed?.Invoke();
         }
     }
+    public Task JoinRoom(string name)
+        =>SendMessage(MessageType.System,name,$"{name} has joined this room.");
+
+    public Task LeaveRoom(string name)
+        =>SendMessage(MessageType.System,name,$"{name} has left this room.");
 
     public void Dispose()
     {

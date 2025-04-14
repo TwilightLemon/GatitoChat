@@ -1,3 +1,4 @@
 ﻿namespace GatitoChat.Local.Models;
 
-public record class UniversalMessageEntity(string Name, string Message);
+public enum MessageType{User,System}
+public record class UniversalMessageEntity(MessageType Type,string Name, string Message);
