@@ -1,4 +1,4 @@
-name: Publish Exe Files
+name: Publish Files
 
 on:
   push:
@@ -49,19 +49,19 @@ jobs:
       run: dotnet publish  -p:PublishProfile=${{env.PbOSX}}
        
     - name: Upload build artifacts for Windows x64
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: Release win-x64
         path: ${{env.FolderWin}}
 
     - name: Upload build artifacts for Linux x64
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: Release linux-x64
         path: ${{env.FolderLinux}}
 
     - name: Upload build artifacts for OSX arm64
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: Release osx-arm64
         path: ${{env.FolderOSX}}
