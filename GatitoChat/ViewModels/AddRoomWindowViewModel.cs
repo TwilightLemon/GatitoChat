@@ -8,12 +8,18 @@ using GatitoChat.Views;
 
 namespace GatitoChat.ViewModels;
 
-public partial class AddRoomWindowViewModel(ChatClientService chatClientService):ViewModelBase
+public partial class AddRoomWindowViewModel(
+    ChatClientService chatClientService,
+    UserProfileService userProfileService):ViewModelBase
 {
     [ObservableProperty]private bool _chosenRemote = false;
     [RelayCommand]
     private void ChooseRemoteRoom()
     {
+        if (userProfileService.Credential is null)
+        {
+            MessageBox.Show("Login first!");
+        }
         ChosenRemote = true;
     }
 

@@ -1,0 +1,43 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="GatitoChat.Views.MessageBox"
+        Title="MessageBox"
+        CanResize="False"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False"
+        Background="Transparent"
+        Height="220"
+        Width="320"
+        TransparencyLevelHint="AcrylicBlur"
+        ExtendClientAreaToDecorationsHint="True">
+        <Panel>
+                <ExperimentalAcrylicBorder IsHitTestVisible="False">
+                        <ExperimentalAcrylicBorder.Material>
+                                <ExperimentalAcrylicMaterial
+                                        BackgroundSource="Digger"
+                                        TintColor="{DynamicResource AcrylicTintColor}"
+                                        TintOpacity="1"
+                                        MaterialOpacity="{DynamicResource WindowMaskOpacity}" />
+                        </ExperimentalAcrylicBorder.Material>
+                </ExperimentalAcrylicBorder>
+                <TextBlock x:Name="HintTb" 
+                           HorizontalAlignment="Stretch"
+                           VerticalAlignment="Center"
+                           TextAlignment="Center"
+                           TextWrapping="Wrap"
+                           Text="t"
+                           Margin="10 0 10 40"/>
+                <Button Theme="{StaticResource RoundAccentButtonTheme}"
+                        Click="OKBtn_OnClick"
+                        Margin="0 0 0 30"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Bottom"
+                        Height="32"
+                        Width="64">
+                        OK
+                </Button>
+        </Panel>
+</Window>

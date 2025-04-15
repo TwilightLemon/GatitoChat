@@ -19,13 +19,21 @@ public class LocalChatService(ChatClientService chatClientService)
     
     public async Task<bool> LaunchServer(int port, string nickname)
     {
-        if (_server != null) return false;
-        
-        _server = new(port);
-        _server.Start();
-        
-        //server also needs to join the room
-        return await JoinLocalRoom("127.0.0.1",port,nickname);
+        try
+        {
+            if (_server != null) return false;
+
+            _server = new(port);
+            _server.Start();
+
+            //server also needs to join the room
+            return await JoinLocalRoom("127.0.0.1", port, nickname);
+        }
+        catch
+        {
+            CloseServer();
+            return false;
+        }
     }
 
     private void CloseServer()
@@ -55,6 +63,8 @@ public class LocalChatService(ChatClientService chatClientService)
             await _client.JoinRoom(nickname);
             return true;
         }
+        _client.Dispose();
+        _client = null;
         return false;
     }
 

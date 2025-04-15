@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using GatitoChat.Services;
+using GatitoChat.Views;
 
 namespace GatitoChat.ViewModels;
 
@@ -34,6 +35,10 @@ public partial class AddLocalServerWindowViewModel(LocalChatService localChatSer
             success=await localChatService.JoinLocalRoom(IpAddress, Port, Nickname);
         }
         if(success)RequestCloseWindow?.Invoke();
+        else
+        {
+            MessageBox.Show("Failed to create or join a local room.");
+        }
     }
     
 }
