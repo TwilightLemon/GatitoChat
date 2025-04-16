@@ -25,6 +25,12 @@ public partial class LoginWindow : Window
         _userProfileService = userProfileService;
         DataContext = _viewModel = viewModel;
         userProfileService.OnLoginCallback += UserProfileService_OnLogin;
+        Closing += LoginWindow_Closing;
+    }
+
+    private void LoginWindow_Closing(object? sender, WindowClosingEventArgs e)
+    {
+        _viewModel.CancelTask();
     }
 
     private async void UserProfileService_OnLogin()

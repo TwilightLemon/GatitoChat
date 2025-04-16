@@ -2,7 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-		xmlns:behavior="using:GatitoChat.Behaviors"
+        xmlns:behavior="using:GatitoChat.Behaviors"
         xmlns:vm="clr-namespace:GatitoChat.ViewModels"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="GatitoChat.Views.LoginWindow"
@@ -32,10 +32,10 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Command="{Binding BackToCheckUserCommand}"
-                    IsVisible="{Binding IsCheckedUser}" >
+                    IsVisible="{Binding IsCheckedUser}">
                 <Path Data="{StaticResource BackIcon}" Stretch="Uniform"
                       Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
-                      Width="16" Height="16"/>
+                      Width="16" Height="16" />
             </Button>
             <StackPanel Margin="20 80 20 20">
                 <TextBlock Text="{Binding Greeting}"
@@ -48,7 +48,7 @@
                         <TextBox x:Name="EmailInputTb" Watermark="Your Email"
                                  Classes="input"
                                  Text="{Binding Uid}"
-								 behavior:KeyEnterBehavior.Command="{Binding CheckUserCommand}"
+                                 behavior:KeyEnterBehavior.Command="{Binding CheckUserCommand}"
                                  Margin="20 60 20 0" />
                         <Button Content="Confirm" Padding="12 8" Margin="20 20 20 0"
                                 Theme="{StaticResource RoundAccentButtonTheme}"
@@ -59,7 +59,8 @@
                                   CornerRadius="8">
                             <StackPanel>
                                 <TextBox Watermark="chat server url" Classes="input" Text="{Binding ChatServerUri}" />
-                                <TextBox Watermark="auth server url" Classes="input" Text="{Binding AuthServerUrl}" Margin="0 8 0 0" />
+                                <TextBox Watermark="auth server url" Classes="input" Text="{Binding AuthServerUrl}"
+                                         Margin="0 8 0 0" />
                             </StackPanel>
                         </Expander>
                     </StackPanel>
@@ -73,7 +74,7 @@
                         <TextBox Watermark="Password"
                                  PasswordChar="*"
                                  Classes="input"
-								  behavior:KeyEnterBehavior.Command="{Binding LoginCommand}"
+                                 behavior:KeyEnterBehavior.Command="{Binding LoginCommand}"
                                  Text="{Binding Password}"
                                  Margin="20 60 20 0" />
                         <Button Content="Login" Padding="12 8" Margin="20 20 20 0"
@@ -99,7 +100,7 @@
                         <TextBox Watermark="Confirm Password"
                                  PasswordChar="*"
                                  Classes="input"
-								 behavior:KeyEnterBehavior.Command="{Binding RegisterCommand}"
+                                 behavior:KeyEnterBehavior.Command="{Binding RegisterCommand}"
                                  Text="{Binding ConfirmPassword}"
                                  Margin="20 20 20 0" />
                         <Button Content="Register" Padding="12 8" Margin="20 20 20 0"
@@ -113,6 +114,103 @@
                    Margin="20 0"
                    TextWrapping="Wrap"
                    IsVisible="{Binding Authenticated}"
-                   Text="{Binding AuthGreeting}" FontSize="32"/>
+                   Text="{Binding AuthGreeting}" FontSize="32" />
+
+        <Border IsVisible="{Binding IsLoading}"
+                BorderThickness="4" CornerRadius="6">
+            <Border.Styles>
+                <Style Selector="Border[IsVisible=True]">
+                    <Style.Animations>
+                        <Animation Duration="0:0:6"
+                                   FillMode="Forward" IterationCount="INFINITE">
+                            <KeyFrame Cue="0%">
+                                <Setter Property="BorderBrush">
+                                    <Setter.Value>
+                                        <ConicGradientBrush>
+                                            <GradientStops>
+                                                <GradientStop Color="Transparent" Offset="0" />
+                                                <GradientStop Color="Transparent" Offset="0.65" />
+                                                <GradientStop Color="#53dfa2" Offset="0.75" />
+                                                <GradientStop Color="Transparent" Offset="0.85" />
+                                            </GradientStops>
+                                        </ConicGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </KeyFrame>
+                            <KeyFrame Cue="20%">
+                                <Setter Property="BorderBrush">
+                                    <Setter.Value>
+                                        <ConicGradientBrush Angle="72">
+                                            <GradientStops>
+                                                <GradientStop Color="Transparent" Offset="0" />
+                                                <GradientStop Color="Transparent" Offset="0.65" />
+                                                <GradientStop Color="#5390df" Offset="0.75" />
+                                                <GradientStop Color="Transparent" Offset="0.85" />
+                                            </GradientStops>
+                                        </ConicGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </KeyFrame>
+                            <KeyFrame Cue="40%">
+                                <Setter Property="BorderBrush">
+                                    <Setter.Value>
+                                        <ConicGradientBrush Angle="144">
+                                            <GradientStops>
+                                                <GradientStop Color="Transparent" Offset="0" />
+                                                <GradientStop Color="Transparent" Offset="0.65" />
+                                                <GradientStop Color="#f3ab28" Offset="0.75" />
+                                                <GradientStop Color="Transparent" Offset="0.85" />
+                                            </GradientStops>
+                                        </ConicGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </KeyFrame>
+                            <KeyFrame Cue="60%">
+                                <Setter Property="BorderBrush">
+                                    <Setter.Value>
+                                        <ConicGradientBrush Angle="216">
+                                            <GradientStops>
+                                                <GradientStop Color="Transparent" Offset="0" />
+                                                <GradientStop Color="Transparent" Offset="0.65" />
+                                                <GradientStop Color="#ef7264" Offset="0.75" />
+                                                <GradientStop Color="Transparent" Offset="0.85" />
+                                            </GradientStops>
+                                        </ConicGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </KeyFrame>
+                            <KeyFrame Cue="80%">
+                                <Setter Property="BorderBrush">
+                                    <Setter.Value>
+                                        <ConicGradientBrush Angle="288">
+                                            <GradientStops>
+                                                <GradientStop Color="Transparent" Offset="0" />
+                                                <GradientStop Color="Transparent" Offset="0.65" />
+                                                <GradientStop Color="#6471ef" Offset="0.75" />
+                                                <GradientStop Color="Transparent" Offset="0.85" />
+                                            </GradientStops>
+                                        </ConicGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </KeyFrame>
+                            <KeyFrame Cue="100%">
+                                <Setter Property="BorderBrush">
+                                    <Setter.Value>
+                                        <ConicGradientBrush Angle="360">
+                                            <GradientStops>
+                                                <GradientStop Color="Transparent" Offset="0" />
+                                                <GradientStop Color="Transparent" Offset="0.65" />
+                                                <GradientStop Color="#5390df" Offset="0.75" />
+                                                <GradientStop Color="Transparent" Offset="0.85" />
+                                            </GradientStops>
+                                        </ConicGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </KeyFrame>
+                        </Animation>
+                    </Style.Animations>
+                </Style>
+            </Border.Styles>
+        </Border>
     </Panel>
 </Window>

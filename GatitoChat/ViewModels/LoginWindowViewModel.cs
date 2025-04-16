@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using GatitoChat.Core;
 using GatitoChat.Core.Models;
 using GatitoChat.Services;
+using GatitoChat.Views;
 
 namespace GatitoChat.ViewModels;
 
@@ -14,6 +17,7 @@ public partial class LoginWindowViewModel
         UserProfileService userProfileService)
     : ViewModelBase
 {
+    private CancellationTokenSource? cts = new();
     private const string OriGreeting = "Welcome to GatitoChat!";
     private const string OriHint = "Login via A Gatito Auth Server";
     [ObservableProperty] private string _greeting = OriGreeting;
@@ -44,6 +48,7 @@ public partial class LoginWindowViewModel
     private bool _isCheckedUser;
     [ObservableProperty] private bool _isUserExisting;
     [ObservableProperty] private bool _authenticated;
+    [ObservableProperty] private bool _isLoading;
 
     private AuthenticationClient? _authClient;
 
@@ -59,26 +64,28 @@ public partial class LoginWindowViewModel
     {
         if (string.IsNullOrWhiteSpace(Uid)) return;
         if (string.IsNullOrEmpty(Password)) return;
+        cts ??= new();
         
-        if (await _authClient!.Login(Uid, Password) is { } res)
+        IsLoading = true;
+        if (await _authClient!.Login(Uid, Password,cts.Token) is { } res)
         {
             Authenticate(res);
         }
         else
         {
-            Hint="Wrong password";
-            await Task.Delay(3000);
-            Hint = OriHint;
+            MessageBox.Show("Wrong password!!! ");
         }
+        IsLoading = false;
     }
 
     [RelayCommand]
     private async Task CheckUser()
     {
         if (string.IsNullOrWhiteSpace(Uid)) return;
-
+        cts ??= new();
+        IsLoading = true;
         _authClient ??= new(httpClientFactory.CreateClient(App.PublicClientFlag), AuthServerUrl);
-        if (await _authClient.CheckUser(Uid) is { Success: true } usr)
+        if (await _authClient.CheckUser(Uid,cts.Token) is { Success: true } usr)
         {
             Greeting = $"Welcome back, {usr.UserName}!";
 
@@ -90,6 +97,7 @@ public partial class LoginWindowViewModel
             IsUserExisting = false;
             IsCheckedUser = true;
         }
+        IsLoading = false;
     }
 
     [RelayCommand]
@@ -98,20 +106,34 @@ public partial class LoginWindowViewModel
         if (string.IsNullOrWhiteSpace(Uid)) return;
         if (string.IsNullOrWhiteSpace(Password) || Password != ConfirmPassword) return;
         if (string.IsNullOrWhiteSpace(Username)) return;
-
-        var (success, res) = await _authClient!.Register(Username, Password, Uid);
+        cts ??= new();
+        IsLoading = true;
+        var (success, res) = await _authClient!.Register(Username, Password, Uid,cts.Token);
         if (success && res != null)
         {
             //once register successfully, login
             await Login();
         }
+        IsLoading = false;
     }
 
     [RelayCommand]
     private void BackToCheckUser()
     {
+        CancelTask();
         Greeting = OriGreeting;
         IsCheckedUser = false;
         IsUserExisting = false;
+    }
+
+    public void CancelTask()
+    {
+        if (cts != null && cts.IsCancellationRequested)
+        {
+            cts?.Cancel();
+            cts?.Dispose();
+            cts = null;
+            Debug.WriteLine("Login operation cancelled.");
+        }
     }
 }
