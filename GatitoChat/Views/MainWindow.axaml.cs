@@ -33,13 +33,17 @@ public partial class MainWindow : Window
 
     private void MessageInputTb_PreviewKeyDown(object? sender,KeyEventArgs e)
     {
-        //回车发送消息，Ctrl+Enter换行
+        //回车发送消息，Ctrl(or Shift)+Enter换行
         if (e.Key == Key.Enter)
         {
-            if (e.KeyModifiers == KeyModifiers.Control)
+            if (e.KeyModifiers is KeyModifiers.Control or KeyModifiers.Shift)
             {
-                MessageInputTb.Text += Environment.NewLine;
-                MessageInputTb.CaretIndex = MessageInputTb.Text.Length;
+                int caretIndex = MessageInputTb.CaretIndex;
+                // 在光标位置插入换行符
+                MessageInputTb.Text = MessageInputTb.Text.Insert(caretIndex, Environment.NewLine);
+
+                // 更新光标位置到换行符之后
+                MessageInputTb.CaretIndex = caretIndex + Environment.NewLine.Length;
             }
             else
             {

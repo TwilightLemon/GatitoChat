@@ -84,9 +84,10 @@ public partial class MainWindowViewModel : ViewModelBase
     private async Task SendMessage()
     {
         if(string.IsNullOrWhiteSpace(Message)||SelectedRoom==null)return;
+        string msg = Message.Replace(Environment.NewLine, Environment.NewLine+ Environment.NewLine);//很不清真 😡
         if (SelectedRoom.IsLocalRoom)
-            await _localChatService.SendMessageAsync(Message);
-        else await _chatClientService.SendMessage(SelectedRoom,Message);
+            await _localChatService.SendMessageAsync(msg);
+        else await _chatClientService.SendMessage(SelectedRoom,msg);
         Message = "";
     }
 }
