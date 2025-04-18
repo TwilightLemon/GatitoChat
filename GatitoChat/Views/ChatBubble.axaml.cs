@@ -38,7 +38,7 @@ public partial class ChatBubble : UserControl
         if (value.Type == SenderType.System)
         {
             Username.IsVisible = false;
-           // MsgTb.TextAlignment = TextAlignment.Center;
+            MsgTb.HorizontalAlignment = HorizontalAlignment.Center;
             MsgContainer.Margin = new Thickness(0);
             MsgContainer.HorizontalAlignment =  HorizontalAlignment.Stretch;
         }else if (value.Type == SenderType.Self)

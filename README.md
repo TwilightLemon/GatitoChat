@@ -16,6 +16,15 @@ Gatito Auth Server和Chat Server分别使用Https和wss协议与客户端进行�
 mkPBC协议保证你提供的用户名(经过hash盲化)只会泄露相同性，而密码确保了强不可伪造性，即使服务器被攻破，也不会泄露关于密码的任何信息。
 
 Chat Server只认可来自Gatito Auth Server的签名Token，有效期为UTC世界时当日，确保用户身份诚实。
+用户提供有效邮箱验证后，邮箱信息即从Gatito Auth Server中删除，不会与账号绑定。我们会定期清理不活跃的账号。  
+以下是一个服务器端储存的用户信息示例，只有`name`是明文，`uid`由客户端签名并盲化，`pkSign`是服务端公钥。
+```json
+{
+  "name": "twlm",
+  "uid": "wjcoNLw8w/WFAUy+MlqALVJVplq/oQxzrpEEtMl1Czk=",
+  "pkSign": "-----BEGIN PUBLIC KEY-----\nxxxxxxxxxxxxxx\n-----END PUBLIC KEY-----",
+}
+```
 
 本来想做群组加密的，后来发现我的能力只能调库，那不如直接用AES对称加密...
 
@@ -31,7 +40,7 @@ dotnet run --project GatitoChat
 3. 使用发布版本(可能有，如果作者不懒的话)
 
 ### 通过GatitoAuth登录服务器
-在主页面点击用户头像，输入用户名(Email, 仅用于标识用户，不会发送邮件)，点击'Confirm'，如果没有注册过会自动前往注册，注册后会自动登录。  
+在主页面点击用户头像，输入用户名(注意，从2025.4.18开始，所有新注册用户需要验证有效邮箱)，点击'Confirm'，如果没有注册过会自动前往注册，注册后会自动登录。  
 ![register](https://raw.githubusercontent.com/TwilightLemon/Data/refs/heads/master/gatitochat_register.jpg)
 
 ### 创建房间

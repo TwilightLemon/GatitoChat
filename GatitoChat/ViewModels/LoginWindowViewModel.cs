@@ -7,6 +7,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using GatitoChat.Core;
 using GatitoChat.Core.Models;
+using GatitoChat.Core.Security;
 using GatitoChat.Services;
 using GatitoChat.Views;
 
@@ -25,9 +26,9 @@ public partial class LoginWindowViewModel
     [ObservableProperty] private string _authGreeting = string.Empty;
 
     public string? Uid { get; set; }
+    public string? VerificationCode { get; set; }
     public string? Password { get; set; }
     public string? ConfirmPassword { get; set; }
-
     public string? Username { get; set; }
 
     [ObservableProperty]
@@ -51,6 +52,8 @@ public partial class LoginWindowViewModel
     [ObservableProperty] private bool _isLoading;
 
     private AuthenticationClient? _authClient;
+    private CheckResponse? _checkToken;
+    private VerifierResponse? _verificationToken;
 
     private void Authenticate(UserCredential credential)
     {
@@ -85,17 +88,34 @@ public partial class LoginWindowViewModel
         cts ??= new();
         IsLoading = true;
         _authClient ??= new(httpClientFactory.CreateClient(App.PublicClientFlag), AuthServerUrl);
-        if (await _authClient.CheckUser(Uid,cts.Token) is { Success: true } usr)
+        var usr = await _authClient.CheckUser(Uid, cts.Token);
+        if (usr is { Success: true })
         {
-            Greeting = $"Welcome back, {usr.UserName}!";
-
+            Greeting = $"Welcome back, {usr.Username}!";
             IsUserExisting = true;
             IsCheckedUser = true;
         }
-        else
+        else if(usr is { SessionId:not null })
         {
+            //中断性变更：已存在的账号可以继续使用，不存在的需要先验证邮箱格式
+            if (!TextUtils.EmailRegex().IsMatch(Uid))
+            {
+                MessageBox.Show("Invalid email address.");
+                IsLoading = false;
+                return;
+            }
+
             IsUserExisting = false;
             IsCheckedUser = true;
+            _checkToken = usr;
+            var verifier = await _authClient!.VerifyEmail(usr, Uid, cts.Token);
+            if (verifier is null || !verifier.Success)
+            {
+                MessageBox.Show("Failed to access auth server!!");
+                IsLoading = false;
+                return;
+            }
+            _verificationToken = verifier;
         }
         IsLoading = false;
     }
@@ -106,15 +126,22 @@ public partial class LoginWindowViewModel
         if (string.IsNullOrWhiteSpace(Uid)) return;
         if (string.IsNullOrWhiteSpace(Password) || Password != ConfirmPassword) return;
         if (string.IsNullOrWhiteSpace(Username)) return;
+        if (_checkToken is null||string.IsNullOrEmpty(VerificationCode)||_verificationToken is null) return;
+
         cts ??= new();
         IsLoading = true;
-        var (success, res) = await _authClient!.Register(Username, Password, Uid,cts.Token);
+
+        var (success, res) = await _authClient!.Register(_checkToken, _verificationToken, VerificationCode,Username, Password, Uid,cts.Token);
         if (success && res != null)
         {
             //once register successfully, login
             await Login();
         }
-        IsLoading = false;
+        else
+        {
+            MessageBox.Show("Failed to register to GatitoAuth!!");
+        }
+            IsLoading = false;
     }
 
     [RelayCommand]

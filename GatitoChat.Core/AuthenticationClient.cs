@@ -8,18 +8,42 @@ namespace GatitoChat.Core;
 
 public class AuthenticationClient(HttpClient hc,string endpoint)
 {
-    public async Task<LoginResponse?> CheckUser(string uid,CancellationToken cancellationToken)
+    public async Task<CheckResponse?> CheckUser(string uid,CancellationToken cancellationToken)
     {
         var blindUid = PBCUtils.BlindUid(uid);
-        var msg = new LoginEntity() { Uid = blindUid, Rnd = "query" };
+        var msg = new LoginEntity() { Uid = blindUid, Rnd = Guid.NewGuid().ToString() };
         var content=JsonContent.Create(msg, AppJsonContext.Default.LoginEntity);
         var response = await hc.PostAsync(endpoint + "check", content, cancellationToken);
         var json = await response.Content.ReadAsStringAsync(cancellationToken);
-        return JsonSerializer.Deserialize(json, AppJsonContext.Default.LoginResponse);
+        var res= JsonSerializer.Deserialize(json, AppJsonContext.Default.CheckResponse);
+        if (res != null){
+            res.rnd = msg.Rnd;
+            res.Uid = blindUid;
+        }
+        return res;
+    }
+
+    public async Task<VerifierResponse?>  VerifyEmail(CheckResponse check,string email,CancellationToken cancellationToken)
+    {
+        if (check is not { rnd: not null, SessionId: not null,Uid:not null}) return null;
+        var msg = new VerifierEntity()
+        {
+            Email = email,
+            BlindedUid = check.Uid,
+            Rnd = check.rnd,
+            SessionId = check.SessionId
+        };
+        var content = JsonContent.Create(msg, AppJsonContext.Default.VerifierEntity);
+        var response = await hc.PostAsync(endpoint + "code", content, cancellationToken);
+        var json = await response.Content.ReadAsStringAsync(cancellationToken);
+        return JsonSerializer.Deserialize(json, AppJsonContext.Default.VerifierResponse);
     }
     
-    public async Task<(bool,RegisterEntity?)> Register(string username, string pw,string uid,CancellationToken cancellationToken)
+    public async Task<(bool,RegisterEntity?)> Register(CheckResponse check,VerifierResponse verification,
+            string oriCode,string username, string pw,string uid,CancellationToken cancellationToken)
     {
+        if (check is not { rnd: not null, SessionId: not null }) return (false, null);
+
         var (_,pkSign) = PBCUtils.KeyGen(pw);
         Console.WriteLine("pkSign: "+pkSign);
         var blindUid = PBCUtils.BlindUid(uid);
@@ -27,7 +51,11 @@ public class AuthenticationClient(HttpClient hc,string endpoint)
         {
             Name = username,
             Uid = blindUid,
-            PkSign = pkSign
+            PkSign = pkSign,
+            Rnd=check.rnd,
+            SessionId=check.SessionId,
+            VfCode=verification.Code,
+            OriVfCode=oriCode
         };
         var content=JsonContent.Create(msg,AppJsonContext.Default.RegisterEntity);
         var response = await hc.PostAsync(endpoint + "register", content, cancellationToken);

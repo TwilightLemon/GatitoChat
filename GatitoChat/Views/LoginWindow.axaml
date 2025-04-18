@@ -88,10 +88,14 @@
                                 <Binding Path="IsCheckedUser" />
                             </MultiBinding>
                         </StackPanel.IsVisible>
+						<TextBox Watermark="Verification Code sent to your email"
+                                 Classes="input"
+                                 Text="{Binding VerificationCode}"
+                                 Margin="20 60 20 0" />
                         <TextBox Watermark="Nickname"
                                  Classes="input"
                                  Text="{Binding Username}"
-                                 Margin="20 60 20 0" />
+                                 Margin="20 20 20 0" />
                         <TextBox Watermark="Password"
                                  PasswordChar="*"
                                  Classes="input"
