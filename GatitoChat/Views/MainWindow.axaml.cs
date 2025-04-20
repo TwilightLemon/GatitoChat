@@ -4,6 +4,7 @@ using Avalonia.Interactivity;
 using GatitoChat.Services;
 using GatitoChat.ViewModels;
 using System;
+using GatitoChat.Models;
 
 namespace GatitoChat.Views;
 
@@ -18,12 +19,28 @@ public partial class MainWindow : Window
     }
     #endif
     
-    public MainWindow(MainWindowViewModel  viewModel)
+    public MainWindow(MainWindowViewModel viewModel,ChatClientService  chatClientService)
     {
         DataContext =_vm =  viewModel;
         InitializeComponent();
         Closing += MainWindow_Closing;
+        chatClientService.OnNewMessageReceived += ChatClientService_OnNewMessageReceived;
         MessageInputTb.AddHandler(TextBox.KeyDownEvent, MessageInputTb_PreviewKeyDown, RoutingStrategies.Tunnel);
+    }
+
+    private bool _isAtBottom;
+    private void MsgScrollViewer_PointerWheelChanged(object? sender, PointerWheelEventArgs e)
+    {
+        _isAtBottom =
+            Math.Abs(MsgScrollViewer.Offset.Y + MsgScrollViewer.Viewport.Height - MsgScrollViewer.Extent.Height) < 5;
+    }
+
+    private void ChatClientService_OnNewMessageReceived(RoomModel room,MessageItem msg)
+    {
+        if (_isAtBottom && room == _vm.SelectedRoom)
+        {
+            MsgScrollViewer.ScrollToEnd();
+        }
     }
 
     private async void MainWindow_Closing(object? sender, WindowClosingEventArgs e)

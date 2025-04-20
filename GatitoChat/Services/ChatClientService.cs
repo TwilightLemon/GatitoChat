@@ -2,8 +2,11 @@
 using GatitoChat.Core.Models;
 using GatitoChat.Core.Security;
 using GatitoChat.Models;
+using GatitoChat.Views;
 using System;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -17,6 +20,7 @@ public class ChatClientService
 
     public ObservableCollection<RoomModel> Rooms { get; } = [];
     public Action? OnConnectionFailed,OnConnectionSucceeded;
+    public event Action<RoomModel,MessageItem>? OnNewMessageReceived;
 
     public ChatClientService(UserProfileService userProfileService)
     {
@@ -37,13 +41,19 @@ public class ChatClientService
                 type = SenderType.System;
             }
             else if (msg.Type is MessageType.Chat &&
-             msg.SenderId==_userProfileService.Credential!.BlindedUid) //self message. Note that the server will also resend the message to the sender.
+            msg.SenderId==_userProfileService.Credential!.BlindedUid) //self message. Note that the server will also resend the message to the sender.
             {
                 type = SenderType.Self;
             }
-            room.Messages.Add(new MessageItem(type,msg.SenderName,msg.Message));
+
+            var (displayText,imageData)=MessageContent.Parse(msg, type);
+            if (displayText == null) return;
+
+            var msgItem = new MessageItem(type, msg.SenderName, displayText,imageData);
+            room.Messages.Add(msgItem);
             //update last message
-            room.LastMsg=$"{msg.SenderName}: {msg.Message}";
+            room.LastMsg=$"{msg.SenderName}: {displayText}";
+            OnNewMessageReceived?.Invoke(room,msgItem);
         }
     }
 
@@ -71,7 +81,16 @@ public class ChatClientService
 
     public async Task SendMessage(RoomModel room,string message)
     {
-        await _chatClient.ChatMessage(room.HashId,message);
+        var msg = new MessageContent(ContentType.PlainText, message);
+        var msgBody = JsonSerializer.Serialize(msg, AppJsonContext.Default.MessageContent);
+        await _chatClient.ChatMessage(room.HashId,msgBody);
+    }
+
+    public async Task SendImage(RoomModel room,string base64)
+    {
+        var msg = new MessageContent(ContentType.Image, base64);
+        var msgBody = JsonSerializer.Serialize(msg, AppJsonContext.Default.MessageContent);
+        await _chatClient.ChatMessage(room.HashId, msgBody);
     }
 
     public async Task CloseAll()

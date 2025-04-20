@@ -84,8 +84,10 @@ public class ChatClient:IDisposable
         {
             var bytes = Encoding.UTF8.GetBytes(StringifyMsgBody(new()
             {
-                Name = UserInfo.Username,SenderId = UserInfo.BlindedUid,
-                Token = UserInfo.Token,RoomHash = roomHash,
+                Name = UserInfo.Username,
+                SenderId = UserInfo.BlindedUid,
+                Token = UserInfo.Token,
+                RoomHash = roomHash,
                 Type = type,CipherMsg = message,
                 Sign = UserInfo.Sign
             }));

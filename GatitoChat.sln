@@ -1,5 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.35806.103 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GatitoChat", "GatitoChat\GatitoChat.csproj", "{C2255E45-743E-44AB-B5A5-31534B79A5FE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GatitoChat.Core", "GatitoChat.Core\GatitoChat.Core.csproj", "{D8AC1C09-1DF8-4156-BC84-2FE3151A6086}"
@@ -24,5 +27,11 @@ Global
 		{C572FFB8-0EE2-48CB-9367-6BD974E01923}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C572FFB8-0EE2-48CB-9367-6BD974E01923}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C572FFB8-0EE2-48CB-9367-6BD974E01923}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3A72A417-F387-41C0-AFFB-1D6D74989BD5}
 	EndGlobalSection
 EndGlobal

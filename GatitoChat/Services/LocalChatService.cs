@@ -1,8 +1,10 @@
-﻿using System.Collections.ObjectModel;
-using System.Threading.Tasks;
+﻿using GatitoChat.Core;
 using GatitoChat.Local;
 using GatitoChat.Local.Models;
 using GatitoChat.Models;
+using System.Collections.ObjectModel;
+using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace GatitoChat.Services;
 
@@ -11,7 +13,7 @@ public class LocalChatService(ChatClientService chatClientService)
     private WsServer? _server;
     private WsClient? _client;
     private readonly ObservableCollection<RoomModel> _rooms = chatClientService.Rooms;
-    private RoomModel? _currentRoom;
+    private RoomModel? _currentRoom; // only single local room allowed.
     /// <summary>
     /// username as an identity
     /// </summary>
@@ -71,11 +73,24 @@ public class LocalChatService(ChatClientService chatClientService)
     private void Client_OnMessageReceived(UniversalMessageEntity message)
     {
         if (_currentRoom == null) return;
-        
-        //the local chat server will not resend the message to the sender, so received message is always from other.
+
+        //the local chat server will not resend the message to the sender, so received message is always from the other.
         // and also the local chat server only supports user message.
-        _currentRoom.Messages.Add(new (message.Type==MessageType.User?SenderType.Other:SenderType.System,message.Name,message.Message));
-        _currentRoom.LastMsg = $"{message.Name}: {message.Message}";
+        if (message.Type == MessageType.System)
+        {
+            _currentRoom.Messages.Add(new(SenderType.System, message.Name, message.Message));
+            _currentRoom.LastMsg = $"{message.Name}: {message.Message}";
+        }
+        else
+        {
+            var msgBody = JsonSerializer.Deserialize(message.Message, AppJsonContext.Default.MessageContent);
+            if(msgBody==null) return;
+            var displayText= msgBody.Type == ContentType.PlainText ? msgBody.Content : "[Image]";
+            var imageData=msgBody.Type == ContentType.Image ? msgBody.Content : null;
+            _currentRoom.Messages.Add(new(SenderType.Other, message.Name, displayText,imageData));
+            _currentRoom.LastMsg = $"{message.Name}: {displayText}";
+        }
+
     }
 
     public async Task SendMessageAsync(string message)
@@ -84,6 +99,18 @@ public class LocalChatService(ChatClientService chatClientService)
         {
             await _client.SendMessage(MessageType.User,_nickname, message);
             _currentRoom.Messages.Add(new (SenderType.Self,_nickname,message));
+        }
+    }
+
+    public async Task SendImageAsync(string base64)
+    {
+        if (_client != null && _currentRoom != null)
+        {
+            var msg = new MessageContent(ContentType.Image, base64);
+            var msgBody = JsonSerializer.Serialize(msg, AppJsonContext.Default.MessageContent);
+            await _client.SendMessage(MessageType.User, _nickname, msgBody);
+
+            _currentRoom.Messages.Add(new(SenderType.Self, _nickname, "[Image]",base64));
         }
     }
 

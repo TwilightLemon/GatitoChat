@@ -5,7 +5,7 @@ using GatitoChat.Core.Models;
 namespace GatitoChat.Models;
 
 public enum SenderType{Self,Other,System}
-public record MessageItem(SenderType Type,string Name,string Content);
+public record MessageItem(SenderType Type,string Name,string Content,string? ImageData=null);
 public partial class RoomModel(string name,string hashId):ObservableObject
 {
     /// <summary>

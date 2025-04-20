@@ -19,6 +19,7 @@ public partial class AddRoomWindowViewModel(
         if (userProfileService.Credential is null)
         {
             MessageBox.Show("Login first!");
+            return;
         }
         ChosenRemote = true;
     }

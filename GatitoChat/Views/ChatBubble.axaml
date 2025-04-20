@@ -2,7 +2,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-			 xmlns:md="using:MarkdownViewer.Core.Controls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="GatitoChat.Views.ChatBubble">
    <Panel Margin="0 12 0 12">
@@ -11,7 +10,7 @@
                Margin="0 24 40 0" Padding="8 4"
                CornerRadius="8"
                Background="{DynamicResource MaskBrush}">
-		   <md:MarkdownViewer x:Name="MsgTb"/>
+		   <TextBlock x:Name="MsgTb" TextWrapping="Wrap"/>
        </Border>
    </Panel>
 </UserControl>

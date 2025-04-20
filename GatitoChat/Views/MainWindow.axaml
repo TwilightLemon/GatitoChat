@@ -108,7 +108,7 @@
 						</Button>
 					</WrapPanel>
 
-					<ScrollViewer Margin="0 60 8 180">
+					<ScrollViewer x:Name="MsgScrollViewer" Margin="0 60 8 184" PointerWheelChanged="MsgScrollViewer_PointerWheelChanged">
 						<ItemsControl Margin="12 0 12 0" ItemsSource="{Binding SelectedRoom.Messages,FallbackValue=''}">
 							<ItemsControl.ItemTemplate>
 								<DataTemplate>
@@ -137,6 +137,12 @@
 							</Style>
 						</TextBox.Styles>
 					</TextBox>
+					<Button HorizontalAlignment="Right" VerticalAlignment="Bottom"
+							Margin="0 0 110 14"
+							Command="{Binding SendImageCommand}"
+							Theme="{StaticResource RoundButtonTheme}">
+						Send Image
+					</Button>
 					<Button HorizontalAlignment="Right" VerticalAlignment="Bottom"
 							Margin="0 0 40 14"
 							Command="{Binding SendMessageCommand}"

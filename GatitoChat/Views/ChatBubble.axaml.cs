@@ -2,7 +2,10 @@
 using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Media;
+using Avalonia.Media.Imaging;
 using GatitoChat.Models;
+using System;
+using System.IO;
 
 namespace GatitoChat.Views;
 
@@ -38,7 +41,7 @@ public partial class ChatBubble : UserControl
         if (value.Type == SenderType.System)
         {
             Username.IsVisible = false;
-            MsgTb.HorizontalAlignment = HorizontalAlignment.Center;
+            MsgTb.TextAlignment = TextAlignment.Center;
             MsgContainer.Margin = new Thickness(0);
             MsgContainer.HorizontalAlignment =  HorizontalAlignment.Stretch;
         }else if (value.Type == SenderType.Self)
@@ -50,6 +53,21 @@ public partial class ChatBubble : UserControl
         }
 
         Username.Text = value.Name;
-        MsgTb.MarkdownText = value.Content;
+        if (value.ImageData!=null)
+        {
+            var base64 = value.ImageData;
+            var data = Convert.FromBase64String(base64);
+            using var stream = new MemoryStream(data);
+            var bitmap = new Bitmap(stream);
+            var bd = new Image()
+            {
+                Source = bitmap,
+                Stretch = Stretch.Uniform,
+                MaxHeight=bitmap.Size.Height
+            };
+            MsgContainer.Child= bd;
+        }
+        else MsgTb.Text = value.Content;
+
     }
 }
