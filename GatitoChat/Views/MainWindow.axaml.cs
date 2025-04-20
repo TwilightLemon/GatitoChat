@@ -24,6 +24,7 @@ public partial class MainWindow : Window
         DataContext =_vm =  viewModel;
         InitializeComponent();
         Closing += MainWindow_Closing;
+        PointerPressed += Window_OnPointerPressed;
         chatClientService.OnNewMessageReceived += ChatClientService_OnNewMessageReceived;
         MessageInputTb.AddHandler(TextBox.KeyDownEvent, MessageInputTb_PreviewKeyDown, RoutingStrategies.Tunnel);
     }
@@ -42,7 +43,10 @@ public partial class MainWindow : Window
             MsgScrollViewer.ScrollToEnd();
         }
     }
-
+    private void Window_OnPointerPressed(object? sender, PointerPressedEventArgs e)
+    {
+        if (e.Pointer.Type == PointerType.Mouse) this.BeginMoveDrag(e);
+    }
     private async void MainWindow_Closing(object? sender, WindowClosingEventArgs e)
     {
         await App.GetRequiredService<ChatClientService>().CloseAll();

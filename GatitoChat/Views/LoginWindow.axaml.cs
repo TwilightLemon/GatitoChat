@@ -36,7 +36,7 @@ public partial class LoginWindow : Window
     private async void UserProfileService_OnLogin()
     {
         _userProfileService.OnLoginCallback -= UserProfileService_OnLogin;
-        await Task.Delay(1500);
+        await Task.Delay(1000);
         Close();
     }
 

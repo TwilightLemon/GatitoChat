@@ -10,7 +10,8 @@
                Margin="0 24 40 0" Padding="8 4"
                CornerRadius="8"
                Background="{DynamicResource MaskBrush}">
-		   <TextBlock x:Name="MsgTb" TextWrapping="Wrap"/>
+		   <SelectableTextBlock x:Name="MsgTb" Background="Transparent" TextWrapping="Wrap"/>
        </Border>
+	   
    </Panel>
 </UserControl>

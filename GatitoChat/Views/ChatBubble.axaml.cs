@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
@@ -48,8 +49,8 @@ public partial class ChatBubble : UserControl
         {
             MsgContainer.HorizontalAlignment = Username.HorizontalAlignment = HorizontalAlignment.Right;
             MsgContainer.Margin = new Thickness(40,24,0,0);
-            MsgContainer.Bind(BackgroundProperty,Resources.GetResourceObservable("AccentButtonBackground"));
-            MsgTb.Foreground = Brushes.GhostWhite;
+            MsgContainer.Bind(BackgroundProperty,Resources.GetResourceObservable("AccentButtonBackgroundPointerOver"));
+            MsgTb.Foreground = Brushes.Black;
         }
 
         Username.Text = value.Name;
