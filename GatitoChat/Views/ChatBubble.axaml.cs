@@ -15,6 +15,13 @@ public partial class ChatBubble : UserControl
     public ChatBubble()
     {
         InitializeComponent();
+        DoubleTapped += ChatBubble_DoubleTapped;
+    }
+    private SelectableTextBlock? SelectableTb;
+    private void ChatBubble_DoubleTapped(object? sender, TappedEventArgs e)
+    {
+        SelectableTb ??= new() { Text=Message.Content,Foreground=MsgTb.Foreground };
+        MsgContainer.Child= MsgContainer.Child is SelectableTextBlock ? MsgTb : SelectableTb;
     }
 
     static ChatBubble()
@@ -42,7 +49,8 @@ public partial class ChatBubble : UserControl
         if (value.Type == SenderType.System)
         {
             Username.IsVisible = false;
-            MsgTb.TextAlignment = TextAlignment.Center;
+            //MsgTb.TextAlignment = TextAlignment.Center;
+            MsgTb.HorizontalAlignment = HorizontalAlignment.Center;
             MsgContainer.Margin = new Thickness(0);
             MsgContainer.HorizontalAlignment =  HorizontalAlignment.Stretch;
         }else if (value.Type == SenderType.Self)
@@ -68,7 +76,7 @@ public partial class ChatBubble : UserControl
             };
             MsgContainer.Child= bd;
         }
-        else MsgTb.Text = value.Content;
+        else MsgTb.MarkdownText = value.Content;
 
     }
 }

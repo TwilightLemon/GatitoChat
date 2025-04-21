@@ -37,4 +37,14 @@
       <ProjectReference Include="..\GatitoChat.Core\GatitoChat.Core.csproj" />
       <ProjectReference Include="..\GatitoChat.Local\GatitoChat.Local.csproj" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Lib\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="MarkdownViewer.Core">
+        <HintPath>Lib\MarkdownViewer.Core.dll</HintPath>
+      </Reference>
+    </ItemGroup>
 </Project>
