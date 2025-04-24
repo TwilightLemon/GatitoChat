@@ -6,19 +6,27 @@ using GatitoChat.Core.Security;
 
 namespace GatitoChat.Core;
 
+/// <summary>
+/// Client for Gatito Auth Server
+/// </summary>
+/// <param name="hc"></param>
+/// <param name="endpoint"></param>
 public class AuthenticationClient(HttpClient hc,string endpoint)
 {
     public async Task<CheckResponse?> CheckUser(string uid,CancellationToken cancellationToken)
     {
         var blindUid = PBCUtils.BlindUid(uid);
         var msg = new LoginEntity() { Uid = blindUid, Rnd = Guid.NewGuid().ToString() };
+
         var content=JsonContent.Create(msg, AppJsonContext.Default.LoginEntity);
+        //直接拼接url的做法明显的不清真，但这只是一个演示程序...
         var response = await hc.PostAsync(endpoint + "check", content, cancellationToken);
+
         var json = await response.Content.ReadAsStringAsync(cancellationToken);
         var res= JsonSerializer.Deserialize(json, AppJsonContext.Default.CheckResponse);
         if (res != null){
             res.rnd = msg.Rnd;
-            res.Uid = blindUid;
+            res.Uid = blindUid;//manually set the blindUid and rnd for next message exchange. For lightweight protocol, the server doesn't need to send it back.
         }
         return res;
     }
@@ -26,6 +34,7 @@ public class AuthenticationClient(HttpClient hc,string endpoint)
     public async Task<VerifierResponse?>  VerifyEmail(CheckResponse check,string email,CancellationToken cancellationToken)
     {
         if (check is not { rnd: not null, SessionId: not null,Uid:not null}) return null;
+
         var msg = new VerifierEntity()
         {
             Email = email,

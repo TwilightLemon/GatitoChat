@@ -6,6 +6,9 @@ using System.Text.Json;
 
 namespace GatitoChat.Local;
 
+/// <summary>
+/// local client for local server
+/// </summary>
 public class WsClient:IDisposable
 {
     private ClientWebSocket? _ws;
@@ -53,6 +56,7 @@ public class WsClient:IDisposable
             sb.Append(msg);
             if (result.EndOfMessage)
             {
+                //by contrast, local server sends system message in cyphertext (the user sends it, actually)
                 var plainText = AesUtils.Decrypt(sb.ToString());
                 var msgEntity = JsonSerializer.Deserialize(plainText, AppJsonContext.Default.UniversalMessageEntity);
                 if (msgEntity != null)

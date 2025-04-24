@@ -4,6 +4,4 @@ namespace GatitoChat.Local.Models;
 
 [JsonSerializable(typeof(UniversalMessageEntity))]
 [JsonSourceGenerationOptions]
-internal partial class AppJsonContext:JsonSerializerContext
-{
-}
+internal partial class AppJsonContext:JsonSerializerContext{}

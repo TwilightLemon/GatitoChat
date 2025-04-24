@@ -97,7 +97,9 @@ public class LocalChatService(ChatClientService chatClientService)
     {
         if (_client != null&&_currentRoom!=null)
         {
-            await _client.SendMessage(MessageType.User,_nickname, message);
+            var msg=new MessageContent(ContentType.PlainText,message);
+            var msgBody = JsonSerializer.Serialize(msg, AppJsonContext.Default.MessageContent);
+            await _client.SendMessage(MessageType.User,_nickname, msgBody);
             _currentRoom.Messages.Add(new (SenderType.Self,_nickname,message));
         }
     }

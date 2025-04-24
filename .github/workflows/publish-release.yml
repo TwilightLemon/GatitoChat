@@ -11,7 +11,7 @@ jobs:
   build:
     runs-on: windows-latest 
     env:
-      Solution_Name: GatitoChat.sln                       # Replace with your solution name, i.e. MyWpfApp.sln.
+      Solution_Name: GatitoChat.sln                       
       PbWin:  GatitoChat\Properties\PublishProfiles\Windows-x64.pubxml
       PbLinux:  GatitoChat\Properties\PublishProfiles\Linux-x64.pubxml
       PbOSX:  GatitoChat\Properties\PublishProfiles\OSX-arm64.pubxml
@@ -39,7 +39,7 @@ jobs:
     - name: Restore
       run: dotnet restore
 
-    - name: Publish Windown x64
+    - name: Publish Windows x64
       run: dotnet publish  -p:PublishProfile=${{env.PbWin}}
 
     - name: Publish Linux x64

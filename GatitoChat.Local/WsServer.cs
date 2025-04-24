@@ -30,8 +30,9 @@ public class WsServer(int port):IDisposable
             };
             socket.OnMessage = message =>
             {
+                //broadcast to all other clients
                 _sockets.ForEach(s => {
-                    if (s.IsAvailable&&s!=socket)
+                    if (s.IsAvailable&&s!=socket)//exclude self
                         s.Send(message); 
                 });
             };

@@ -5,6 +5,7 @@ namespace GatitoChat.Core.Security;
 
 public class AesUtils
 {
+    //相信伟大的AOT编译会保护它(bushi)
     private static readonly string _embeddedKeySeed = "fadf1eb8-c47f-47c9-b812-fc263e42655b-gatito-chat";
     private static readonly byte[] _embeddedKey = GetHash128(_embeddedKeySeed);
 

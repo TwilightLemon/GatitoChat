@@ -17,7 +17,7 @@ public static class RsaUtils
         using var stream = assembly.GetManifestResourceStream(_publicKeyPath);
         using var reader = new StreamReader(stream);
         var pemReader = new PemReader(reader);
-        return (RsaKeyParameters)pemReader.ReadObject();
+        return (RsaKeyParameters)pemReader.ReadObject();// no need to be cached, for RSA Engine is a singleton.
     }
 
     public static byte[] RsaEncrypt(byte[] data)

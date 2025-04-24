@@ -67,6 +67,8 @@ public class ChatClient:IDisposable
                 {
                     if (body.Type == MessageType.Chat)
                     {
+                        //in a remote room, only chat message is encrypted
+                        //system message is sent in plaintext
                         body.Message = AesUtils.Decrypt(body.Message);
                     }
                     OnMessageReceived?.Invoke(body);

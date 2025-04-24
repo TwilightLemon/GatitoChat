@@ -25,9 +25,14 @@ public partial class App : Application
             .ConfigureServices(RegisterServices)
             .Build();
 
+    /// <summary>
+    /// Global HTTP retry policy 
+    /// Retries HTTP requests that fail due to transient errors or RequestTimeout
+    /// retry up to 3 times, with an exponential backoff strategy
+    /// </summary>
     private static readonly AsyncRetryPolicy<HttpResponseMessage> RetryPolicy = HttpPolicyExtensions
         .HandleTransientHttpError()
-        .OrResult(msg => msg.StatusCode == System.Net.HttpStatusCode.NotFound)
+        .OrResult(msg => msg.StatusCode == System.Net.HttpStatusCode.RequestTimeout)
         .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
     private void RegisterServices(IServiceCollection services)
     {
@@ -66,6 +71,7 @@ public partial class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
+        // Initialize the host and set the main window
         _host = CreateHost();
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
