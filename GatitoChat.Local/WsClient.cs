@@ -16,11 +16,15 @@ public class WsClient:IDisposable
     private CancellationTokenSource? _cts;
     public event Action<UniversalMessageEntity>? OnMessageReceived;
     public event Action? OnConnectSucceeded, OnConnectFailed;
-    public async Task<bool> ConnectAsync(string connectionUri)
+    public int ConnectionPort { get; set; }
+    private string _aesAddiKey => $"port:{ConnectionPort}";
+    public async Task<bool> ConnectAsync(string ip,int port)
     {
         try
         {
+            string connectionUri = $"ws://{ip}:{port}";
             _ws = new();
+            ConnectionPort = port;
             await _ws.ConnectAsync(new Uri(connectionUri),CancellationToken.None);
             if (_ws.State != WebSocketState.Open)
             {
@@ -57,7 +61,7 @@ public class WsClient:IDisposable
             if (result.EndOfMessage)
             {
                 //by contrast, local server sends system message in cyphertext (the user sends it, actually)
-                var plainText = AesUtils.Decrypt(sb.ToString());
+                var plainText = AesUtils.Decrypt(sb.ToString(),_aesAddiKey);
                 var msgEntity = JsonSerializer.Deserialize(plainText, AppJsonContext.Default.UniversalMessageEntity);
                 if (msgEntity != null)
                     OnMessageReceived?.Invoke(msgEntity);
@@ -72,7 +76,7 @@ public class WsClient:IDisposable
         if (_ws.State == WebSocketState.Open)
         {
             var plainText=JsonSerializer.Serialize(new UniversalMessageEntity(type,name, msg),AppJsonContext.Default.UniversalMessageEntity);
-            var cipherText =AesUtils.Encrypt(plainText);
+            var cipherText =AesUtils.Encrypt(plainText,_aesAddiKey);
             var bytes=Encoding.UTF8.GetBytes(cipherText);
             await _ws.SendAsync(new ArraySegment<byte>(bytes), WebSocketMessageType.Text, true, _cts!.Token);
         }

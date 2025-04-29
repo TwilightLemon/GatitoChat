@@ -49,13 +49,12 @@ public class LocalChatService(ChatClientService chatClientService)
     {
         if( _client != null ) return false;
         
-        string uri=$"ws://{ip}:{port}";
         _client=new();
         _client.OnMessageReceived += Client_OnMessageReceived;
-        var success = await _client.ConnectAsync(uri);
+        var success = await _client.ConnectAsync(ip,port);
         if (success)
         {
-            _currentRoom = new(uri, "")// for a local room, there is no room name or hashId.
+            _currentRoom = new($"ws://{ip}:{port}", "")// for a local room, there is no room name or hashId.
             {
                 IsLocalRoom = true,LastMsg = "::LocalRoom"
             };

@@ -69,7 +69,7 @@ public class ChatClient:IDisposable
                     {
                         //in a remote room, only chat message is encrypted
                         //system message is sent in plaintext
-                        body.Message = AesUtils.Decrypt(body.Message);
+                        body.Message = AesUtils.Decrypt(body.Message,body.RoomId);
                     }
                     OnMessageReceived?.Invoke(body);
                 }
@@ -102,7 +102,7 @@ public class ChatClient:IDisposable
     }
 
     public Task ChatMessage(string roomHash, string message)
-        =>SendMessage(roomHash,MessageType.Chat, AesUtils.Encrypt(message));
+        =>SendMessage(roomHash,MessageType.Chat, AesUtils.Encrypt(message,roomHash));
     public Task JoinRoom(string roomHash)
         =>SendMessage(roomHash,MessageType.Join,"");
         // send empty message to join room, if the room is not exist, the server will create it automatically.

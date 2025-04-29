@@ -16,11 +16,20 @@ public class AesUtils
         return hashBytes;
     }
 
-    public static string Encrypt(string msg)
+    internal static byte[] DeriveKey(string key)
+    {
+        byte[] addi = GetHash128(key);
+        //addi xor with the embedded key
+        for (int i = 0; i < _embeddedKey.Length; i++)
+            addi[i]  ^= _embeddedKey[i];
+        return addi;
+    }
+
+    public static string Encrypt(string msg,string key)
     {
         byte[] dataToEncrypt = Encoding.UTF8.GetBytes(msg);
         using Aes aesAlg = Aes.Create();
-        aesAlg.Key = _embeddedKey;
+        aesAlg.Key = DeriveKey(key);
         aesAlg.Mode = CipherMode.CBC;
         aesAlg.Padding = PaddingMode.PKCS7;
 
@@ -45,12 +54,12 @@ public class AesUtils
         return Convert.ToBase64String(result);
     }
 
-    public static string Decrypt(string base64CipherText)
+    public static string Decrypt(string base64CipherText,string key)
     {
         byte[] dataToDecrypt = Convert.FromBase64String(base64CipherText);
         
         using Aes aesAlg = Aes.Create();
-        aesAlg.Key = _embeddedKey;
+        aesAlg.Key = DeriveKey(key);
         aesAlg.Mode = CipherMode.CBC;
         aesAlg.Padding = PaddingMode.PKCS7;
 
